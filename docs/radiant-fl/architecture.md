@@ -1,7 +1,7 @@
 # RADIANT-FL reference architecture
 
-![concept diagram 1](IMG_0071.jpeg)
-![concept diagram 2](IMG_0072.jpeg)
+![concept diagram 1](IMG_0071.jpg)
+![concept diagram 2](IMG_0072.jpg)
 
 ## System topology
 
