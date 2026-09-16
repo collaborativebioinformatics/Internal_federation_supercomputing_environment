@@ -1,4 +1,4 @@
-# Internal_federation_supercomputing_environment
+# Running Multimodal Models on Gefion with Diverse Data
 Prototype environment for federated learning across isolated/secluded compute environments, coordinated through Gefion HPC.
 
 <img width="100%" height="auto" alt="flowchart" src="https://github.com/user-attachments/assets/40e4ff7f-c12d-4c13-85a5-2a69159bc1ec" />
