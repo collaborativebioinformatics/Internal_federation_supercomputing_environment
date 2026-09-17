@@ -1,10 +1,8 @@
-# SuperFedMMD
-## SuperComputer Federated MultiModal Diagnostics
-
 <p align="center">
   <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
 </p>
-
+# SuperFedMMD
+## SuperComputer Federated MultiModal Diagnostics
 **Run multimodal biomedical models across isolated data environments — without moving the underlying patient data.**
 
 SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
