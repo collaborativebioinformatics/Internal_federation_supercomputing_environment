@@ -12,13 +12,13 @@
 ## Federated learning of multimodal biomedical models across isolated data environments.
 **Local data stay local, and the computation travels. Model parameters and embedding weights are aggregated.**
 
-SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
-
-The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE** as the federation layer. The predictive model itself is intentionally replaceable: SuperFedMMD focuses on the infrastructure required to distribute, execute, coordinate, aggregate and reproduce a federated multimodal workflow.
-
 <p align="center">
   <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
 </p>
+
+SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
+
+The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE** as the federation layer. The predictive model itself is intentionally replaceable: SuperFedMMD focuses on the infrastructure required to distribute, execute, coordinate, aggregate and reproduce a federated multimodal workflow.
 
 <p align="center">
   <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
