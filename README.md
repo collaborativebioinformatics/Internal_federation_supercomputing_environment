@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
+  <img src="docs/assets/superfedmmd-hero.png" width="96%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
 </p>
 
 # SuperComputer Federated MultiModal Diagnostics
@@ -11,7 +11,7 @@ SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research 
 The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE** as the federation layer. The predictive model itself is intentionally replaceable: SuperFedMMD focuses on the infrastructure required to distribute, execute, coordinate, aggregate and reproduce a federated multimodal workflow.
 
 <p align="center">
-  <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
+  <img src="docs/assets/superfedmmd-audiences.png" width="96%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
 </p>
 
 ---
@@ -117,7 +117,7 @@ The final reproducible run should record its Git commit, FLARE version, Gefion/r
 ## How it works — high level
 
 <p align="center">
-  <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
+  <img src="docs/assets/superfedmmd-high-level-flow.png" width="96%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
 </p>
 
 **Local data stay local. The computation travels. Model knowledge is aggregated.**
@@ -248,7 +248,7 @@ The federation interface is intended to be deny-by-default.
 ## Key capabilities
 
 <p align="center">
-  <img src="docs/assets/superfedmmd-capabilities.png" width="100%" alt="Key SuperFedMMD capabilities including privacy-preserving federation, multimodal data, scalable Gefion infrastructure and reproducibility">
+  <img src="docs/assets/superfedmmd-capabilities.png" width="96%" alt="Key SuperFedMMD capabilities including privacy-preserving federation, multimodal data, scalable Gefion infrastructure and reproducibility">
 </p>
 
 The infrastructure is intended to support heterogeneous multimodal sites, reproducible federated execution, controlled outbound communication and multi-institution collaboration without centralising the underlying biomedical source data.
