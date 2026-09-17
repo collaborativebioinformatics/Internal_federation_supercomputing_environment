@@ -1,45 +1,158 @@
-# Supercomputing-based Federated Multimodal Diagnostics
+# SuperFedMMD
+## SuperComputer Federated MultiModal Diagnostics
 
-**Team 6 — Nordic Biobank × NVIDIA Federated Learning Hackathon, Copenhagen, 16–18 September 2026**
+<p align="center">
+  <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
+</p>
 
-Team 6 is developing the **infrastructure and execution architecture** required to run multimodal biomedical models across isolated or secluded data environments, coordinated through the **Gefion HPC environment**.
+**Run multimodal biomedical models across isolated data environments — without moving the underlying patient data.**
 
-The project is deliberately **model-agnostic**. Development of the predictive model itself is handled separately; our system treats the model as a pluggable local execution component.
+SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
 
-## Project objective
+The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE** as the federation layer. The predictive model itself is intentionally replaceable: SuperFedMMD focuses on the infrastructure required to distribute, execute, coordinate, aggregate and reproduce a federated multimodal workflow.
 
-The systems question is:
-
-> **Can the same versioned multimodal model job be executed reproducibly across multiple isolated data environments while patient-level data remain local and Gefion coordinates the federated workflow?**
-
-The hackathon proof of concept focuses on:
-
-- provisioning and connecting federated participants;
-- coordinating execution through Gefion;
-- distributing a model/job definition to isolated environments;
-- executing the supplied model against site-local multimodal data;
-- returning only explicitly permitted model updates and aggregate metrics;
-- aggregating and redistributing global model state;
-- recording sufficient configuration and provenance to reproduce a run.
-
-RADIANT is used as the first multimodal reference use case, but the infrastructure is intended to support other compatible biomedical datasets and models.
+<p align="center">
+  <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
+</p>
 
 ---
 
-## System architecture
+## Table of contents
 
-The diagram below formalises the original hand-drawn Team 6 architecture into a version-controlled systems diagram.
+- [Quick start / How-To](#quick-start--how-to)
+- [How it works — high level](#how-it-works--high-level)
+- [Why this architecture?](#why-this-architecture)
+- [Architecture](#architecture)
+- [Infrastructure method](#infrastructure-method)
+- [Data boundary](#data-boundary)
+- [Key capabilities](#key-capabilities)
+- [Reference use case — RADIANT](#reference-use-case--radiant)
+- [Reproducibility and provenance](#reproducibility-and-provenance)
+- [Current project status](#current-project-status)
+- [Team 6](#team-6)
+- [Documentation](#documentation)
+- [Appendix](#appendix)
+- [Original concept material](#original-concept-material)
+- [References and resources](#references-and-resources)
+
+---
+
+## Quick start / How-To
+
+> **Status:** Hackathon proof of concept under active development. Commands marked `[TO CONFIRM]` will be replaced by the exact commands used in the working Gefion/FLARE implementation.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/collaborativebioinformatics/SuperFedMMD.git
+cd SuperFedMMD
+```
+
+### 2. Prepare the federation
+
+The target topology consists of one federation/control plane associated with Gefion and multiple isolated client environments.
+
+```text
+Gefion
+└── NVIDIA FLARE server / federation coordinator
+
+Secluded environment A
+└── NVIDIA FLARE client + local data + supplied model
+
+Secluded environment B
+└── NVIDIA FLARE client + local data + supplied model
+
+Secluded environment C
+└── NVIDIA FLARE client + local data + supplied model
+```
+
+Each participating environment must implement the same versioned federation/data contract.
+
+### 3. Start the Gefion-side federation components
+
+```bash
+# Tested Gefion / FLARE server startup command:
+[TO CONFIRM]
+```
+
+### 4. Start or connect each secluded client
+
+```bash
+# Tested FLARE client startup command:
+[TO CONFIRM]
+```
+
+### 5. Submit the federated job
+
+```bash
+# Tested job submission command:
+[TO CONFIRM]
+```
+
+The job contains the versioned execution code/configuration required to invoke the supplied model at participating sites.
+
+### 6. Verify the run
+
+A successful infrastructure round should demonstrate:
+
+```text
+global model / state
+        ↓
+distribution to secluded clients
+        ↓
+site-local model execution
+        ↓
+approved update + aggregate metrics
+        ↓
+Gefion / FLARE aggregation
+        ↓
+updated global state
+        ↓
+redistribution
+```
+
+The final reproducible run should record its Git commit, FLARE version, Gefion/runtime configuration, participating clients, federation configuration, round metadata and model/state identifiers.
+
+---
+
+## How it works — high level
+
+<p align="center">
+  <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
+</p>
+
+**Local data stay local. The computation travels. Model knowledge is aggregated.**
+
+---
+
+## Why this architecture?
+
+Modern biomedical models increasingly combine imaging, genomic, molecular and clinical information. The relevant datasets, however, are often distributed across institutions that cannot simply pool raw patient data into a single environment.
+
+SuperFedMMD addresses the infrastructure problem by moving a common, versioned execution workflow to participating data environments rather than moving the source datasets to the model.
+
+This motivates three architectural requirements:
+
+1. **Local data sovereignty** — patient-level data remain under the control of the originating environment.
+2. **Common execution contract** — participating sites expose compatible model-facing inputs and federation outputs.
+3. **Central coordination without centralised raw data** — Gefion and NVIDIA FLARE coordinate jobs, model-state exchange, aggregation and provenance.
+
+These requirements lead directly to the infrastructure method used below.
+
+---
+
+## Architecture
 
 ```mermaid
 flowchart TB
-    REPO["GitHub repository<br/>code · configs · documentation"]
+    REPO["GitHub<br/>code · configs · documentation"]
 
     subgraph GEFION["GEFION HPC — FEDERATION / CONTROL PLANE"]
-        JOB["Federated job package"]
+        JOB["Federated job"]
         SERVER["NVIDIA FLARE server / coordinator"]
         AGG["Aggregation / global state"]
-        PROV["Provisioning & participant configuration"]
-        AUDIT["Audit / provenance / run metadata"]
+        PROV["Provisioning"]
+        AUDIT["Audit / provenance"]
 
         JOB --> SERVER
         PROV --> SERVER
@@ -52,239 +165,135 @@ flowchart TB
     REPO --> JOB
     REPO --> PROV
 
-    subgraph SITEA["SECLUDED ENVIRONMENT A"]
-        ACLIENT["NVIDIA FLARE client"]
-        AADAPT["Local data / execution adapter"]
-        AMODEL["Externally supplied model"]
-        ADATA[("Local multimodal data")]
-        ADATA --> AADAPT --> AMODEL
-        ACLIENT <--> AMODEL
+    subgraph A["SECLUDED ENVIRONMENT A"]
+        AC["NVIDIA FLARE client"]
+        AA["Local execution adapter"]
+        AM["Supplied model"]
+        AD[("Local multimodal data")]
+        AD --> AA --> AM
+        AC <--> AM
     end
 
-    subgraph SITEB["SECLUDED ENVIRONMENT B"]
-        BCLIENT["NVIDIA FLARE client"]
-        BADAPT["Local data / execution adapter"]
-        BMODEL["Externally supplied model"]
-        BDATA[("Local multimodal data")]
-        BDATA --> BADAPT --> BMODEL
-        BCLIENT <--> BMODEL
+    subgraph B["SECLUDED ENVIRONMENT B"]
+        BC["NVIDIA FLARE client"]
+        BA["Local execution adapter"]
+        BM["Supplied model"]
+        BD[("Local multimodal data")]
+        BD --> BA --> BM
+        BC <--> BM
     end
 
-    subgraph SITEC["SECLUDED ENVIRONMENT C"]
-        CCLIENT["NVIDIA FLARE client"]
-        CADAPT["Local data / execution adapter"]
-        CMODEL["Externally supplied model"]
-        CDATA[("Local multimodal data")]
-        CDATA --> CADAPT --> CMODEL
-        CCLIENT <--> CMODEL
+    subgraph C["SECLUDED ENVIRONMENT C"]
+        CC["NVIDIA FLARE client"]
+        CA["Local execution adapter"]
+        CM["Supplied model"]
+        CD[("Local multimodal data")]
+        CD --> CA --> CM
+        CC <--> CM
     end
 
-    SERVER <-->|"job / global state ↔ approved update + metrics"| ACLIENT
-    SERVER <-->|"job / global state ↔ approved update + metrics"| BCLIENT
-    SERVER <-->|"job / global state ↔ approved update + metrics"| CCLIENT
+    SERVER <-->|"job / global state ↔ approved update + metrics"| AC
+    SERVER <-->|"job / global state ↔ approved update + metrics"| BC
+    SERVER <-->|"job / global state ↔ approved update + metrics"| CC
 ```
 
-### Data boundary
+The **model is a pluggable component**. Team 6 focuses on the infrastructure around it: environment provisioning, federation, execution, data boundaries, orchestration and reproducibility.
 
-Raw biomedical data remain inside the secluded environment. The federation interface is deny-by-default.
+---
+
+## Infrastructure method
+
+A SuperFedMMD experiment starts from version-controlled code and configuration. A federated job and common contract are prepared, server/client environments are provisioned, and participating clients connect to the federation.
+
+The federation distributes the active job and global model/state to clients. Each client executes the supplied model against its own local data. Before any output leaves the local environment, the outbound payload is restricted to explicitly approved model objects, updates and aggregate metrics. Gefion-side federation logic combines the returned state and creates the next global state for redistribution.
+
+```mermaid
+flowchart LR
+    A["Versioned job"] --> B["Provision federation"]
+    B --> C["Distribute job / state"]
+    C --> D["Execute locally"]
+    D --> E["Validate outbound payload"]
+    E --> F["Aggregate on Gefion"]
+    F --> G["Create updated global state"]
+    G --> C
+```
+
+Detailed scientific/technical wording is maintained in [Methods](docs/methods.md).
+
+---
+
+## Data boundary
+
+Raw biomedical data are not part of the default federation payload.
 
 ```mermaid
 flowchart LR
     subgraph LOCAL["LOCAL / SECLUDED ENVIRONMENT"]
-        RAW["Raw / patient-level<br/>multimodal data"]
+        RAW["Patient-level multimodal data"]
         HARM["Local harmonisation"]
         EXEC["Model execution"]
-        FILTER["Outbound policy / allow-list"]
-
+        FILTER["Outbound allow-list"]
         RAW --> HARM --> EXEC --> FILTER
     end
 
-    subgraph FED["FEDERATION"]
-        CLIENT["NVIDIA FLARE client"]
-        SERVER["NVIDIA FLARE server<br/>coordinated through Gefion"]
-        AGG["Aggregation / next global state"]
+    FILTER -->|"approved model update + aggregate metrics"| FED["NVIDIA FLARE federation"]
 
-        CLIENT <--> SERVER
-        SERVER --> AGG --> SERVER
-    end
-
-    FILTER -->|"approved model state / update<br/>+ aggregate metrics"| CLIENT
-    SERVER -->|"job + global model state"| CLIENT
-
-    BLOCK["Raw imaging, sequencing data,<br/>patient records and direct identifiers<br/>do not cross the federation boundary"]
-    RAW -.-> BLOCK
+    BLOCK["Raw imaging · sequencing data · patient records · direct identifiers"]
+    RAW -. "remain local" .-> BLOCK
 ```
 
----
-
-## Infrastructure workflow
-
-The primary Team 6 deliverable is an executable and reproducible infrastructure workflow.
-
-```mermaid
-flowchart TD
-    A["Version-controlled code and configuration"] --> B["Define federation contract"]
-    B --> C["Prepare NVIDIA FLARE job"]
-    C --> D["Provision server + client identities"]
-    D --> E["Launch / connect federation on Gefion"]
-    E --> F["Distribute job + global model state"]
-
-    F --> G1["Client A<br/>local execution"]
-    F --> G2["Client B<br/>local execution"]
-    F --> G3["Client C<br/>local execution"]
-
-    G1 --> H["Validate outbound payload"]
-    G2 --> H
-    G3 --> H
-
-    H --> I["Return approved updates / metrics"]
-    I --> J["Server-side aggregation"]
-    J --> K["Create next global state"]
-    K --> L["Record logs, versions and hashes"]
-
-    L --> M{"Another round?"}
-    M -->|Yes| F
-    M -->|No| N["Freeze reproducible run / demo artefacts"]
-```
-
-The internal model architecture, loss function and model-specific optimisation are outside the main Team 6 infrastructure scope.
+The federation interface is intended to be deny-by-default.
 
 ---
 
-## Product
+## Key capabilities
 
-The Team 6 product is not a specific trained model. It is a reusable **federated execution environment** consisting of:
+<p align="center">
+  <img src="docs/assets/superfedmmd-capabilities.png" width="100%" alt="Key SuperFedMMD capabilities including privacy-preserving federation, multimodal data, scalable Gefion infrastructure and reproducibility">
+</p>
 
-| Component | Responsibility |
-|---|---|
-| **Gefion execution environment** | HPC execution and federation/control-plane compute |
-| **NVIDIA FLARE server** | Federation coordination and global workflow |
-| **NVIDIA FLARE clients** | Connect isolated environments to the federation |
-| **Local execution adapter** | Maps local data to the interface expected by the supplied model |
-| **Federation contract** | Defines compatibility, schemas and permitted outbound objects |
-| **Job/configuration package** | Makes an experiment deployable and reproducible |
-| **Audit/provenance layer** | Captures software, configuration, participants, rounds and model-state hashes |
-| **Documentation** | Describes the architecture, process and reproducible execution pathway |
+The infrastructure is intended to support heterogeneous multimodal sites, reproducible federated execution, controlled outbound communication and multi-institution collaboration without centralising the underlying biomedical source data.
 
 ---
 
-## Reference use case: RADIANT
+## Reference use case — RADIANT
 
-The initial proof of concept uses the multimodal RADIANT paediatric low-grade glioma resource.
+RADIANT is used as the initial multimodal reference use case because it combines clinical, imaging-derived and molecular data.
 
-RADIANT is useful as an infrastructure test case because it includes multiple biomedical data modalities. For the PoC, discovery subjects can be partitioned into mutually exclusive virtual sites that emulate independent institutions.
+For infrastructure testing, subjects can be assigned to mutually exclusive virtual environments that emulate independent institutions. This allows the federation, local execution, modality handling, aggregation and provenance mechanisms to be exercised without making the infrastructure dependent on one particular model architecture.
 
-Team 6 uses the dataset to exercise:
-
-- isolated site-local data access;
-- multimodal data interfaces;
-- heterogeneous modality availability;
-- federated client execution;
-- controlled outbound communication;
-- aggregation and redistribution;
-- reproducibility and audit logging.
-
-The infrastructure is not coupled to a particular RADIANT model architecture.
-
----
-
-## Federation contract
-
-Every participating environment must implement the same versioned interface for:
-
-- cohort and subject semantics;
-- modality / feature schemas;
-- local preprocessing and harmonisation;
-- missing-modality representation;
-- model and configuration version;
-- trainable parameter allow-list;
-- outbound object and metric allow-list;
-- software / environment version;
-- model and configuration hashes;
-- run and federation-round metadata.
-
-See [Federation and data contract](docs/radiant-fl/data-contract.md).
+The RADIANT-specific materials are maintained separately under [`docs/radiant-fl/`](docs/radiant-fl/).
 
 ---
 
 ## Reproducibility and provenance
 
-A demonstrable run should be traceable to a reproducible configuration.
-
-At minimum, record:
+A demonstrable run should record at least:
 
 ```text
 Git commit SHA
 NVIDIA FLARE version
 Gefion execution configuration
-environment / container identifier
-federation contract version
+runtime / container identifier
+federation-contract version
 job configuration
 participating client IDs
 model / configuration identifier
 federation round
-global-state hash before and after the round
+input/output global-state identifiers or hashes
 timestamps
 execution status
 ```
 
-Documentation should distinguish clearly between **target architecture**, **implemented components**, and **verified execution**. A component is only described as operational once it has been reproduced in the running hackathon environment.
+Documentation should distinguish clearly between **target architecture**, **implemented components** and **verified execution**.
 
 ---
 
-## Technical definition of done
+## Current project status
 
-The primary success criterion is infrastructure-level:
+SuperFedMMD is under active development during the hackathon. The immediate infrastructure work focuses on Gefion execution, NVIDIA FLARE server/client setup, job packaging, secluded/simulated environments, local execution interfaces, outbound data boundaries, logging and an end-to-end reproducible federation round.
 
-```text
-versioned federated job
-        ↓
-Gefion / NVIDIA FLARE coordination
-        ↓
-multiple isolated clients
-        ↓
-site-local model execution
-        ↓
-approved outbound model update
-        ↓
-aggregation
-        ↓
-redistributed global state
-        ↓
-auditable and reproducible run
-```
-
-The proof of concept is successful when this pathway can be demonstrated without transferring raw patient-level source data between secluded environments.
-
-Predictive model performance is a separate evaluation axis from infrastructure validation.
-
----
-
-## Current hackathon status
-
-This repository is being developed during the hackathon. The current implementation effort is focused on:
-
-1. Gefion access and execution setup;
-2. NVIDIA FLARE server/client configuration;
-3. federated job packaging;
-4. multiple secluded / simulated client environments;
-5. local execution interfaces;
-6. communication and outbound-data boundaries;
-7. provenance and logging;
-8. an end-to-end infrastructure demonstration.
-
-This section should be updated as components are verified.
-
----
-
-## Documentation
-
-- [Methods — infrastructure and federation](docs/methods.md)
-- [RADIANT-FL overview](docs/radiant-fl/README.md)
-- [Reference architecture](docs/radiant-fl/architecture.md)
-- [Development flowchart](docs/radiant-fl/development-flowchart.md)
-- [Implementation checklist](docs/radiant-fl/implementation-checklist.md)
-- [Federation and data contract](docs/radiant-fl/data-contract.md)
+Model architecture and disease-specific model optimisation are handled separately from the primary Team 6 infrastructure workstream.
 
 ---
 
@@ -301,13 +310,23 @@ This section should be updated as components are verified.
 
 ---
 
+## Documentation
+
+- [Methods — infrastructure and federation](docs/methods.md)
+- [RADIANT-FL overview](docs/radiant-fl/README.md)
+- [Reference architecture](docs/radiant-fl/architecture.md)
+- [Development flowchart](docs/radiant-fl/development-flowchart.md)
+- [Federation and data contract](docs/radiant-fl/data-contract.md)
+
+### Appendix
+
+- **[Appendix A — Infrastructure implementation checklist](docs/appendix-implementation-checklist.md)**
+
+---
+
 ## Original concept material
 
-The original hand-drawn project diagram is retained as project provenance and as the source for the structured infrastructure diagrams above.
-
-<img width="100%" height="auto" alt="Original Team 6 project flowchart" src="https://github.com/user-attachments/assets/40e4ff7f-c12d-4c13-85a5-2a69159bc1ec" />
-
-Additional concept sketches are retained under `docs/radiant-fl/IMG_0071.jpg` and `docs/radiant-fl/IMG_0072.jpg`.
+The original hand-drawn diagrams are retained as project provenance and remain available in the repository.
 
 ---
 
