@@ -1,5 +1,6 @@
-# Running Multimodal Models on Gefion with Diverse Data
-Prototype environment for federated learning across isolated/secluded compute environments, coordinated through Gefion HPC.
+# Supercomputing-based Federated Multimodal Diagnostics
+
+Running Multimodal Models on Gefion with Diverse Data. Prototype solution for federated learning across isolated/secluded compute environments of biobanks, coordinated through Gefion HPC.
 
 Interesting work similar to this topic: Khan et al., Multimodal foundation transformer models for multiscale genomics -- https://www.nature.com/articles/s41592-025-02918-6
 
