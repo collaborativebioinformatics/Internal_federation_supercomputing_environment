@@ -4,7 +4,7 @@
 
 # SuperComputer Federated MultiModal Diagnostics
 
-##Federated learning of multimodal biomedical models across isolated data environments
+## Federated learning of multimodal biomedical models across isolated data environments
 
 SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
 
