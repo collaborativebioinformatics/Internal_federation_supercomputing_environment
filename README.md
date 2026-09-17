@@ -1,8 +1,9 @@
+
+# Supercomputer-based Federated Multimodal Diagnostics
+
 <p align="center">
   <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
 </p>
-
-# Supercomputer-based Federated Multimodal Diagnostics
 
 ## How it works — high level
 
