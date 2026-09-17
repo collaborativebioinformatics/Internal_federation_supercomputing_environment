@@ -21,17 +21,6 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
   <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
 </p>
 
-## How it works — high level
-
-<img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
-
-## The Dataset
-
-- COHERENT dataset -- https://www.mdpi.com/2079-9292/11/8/1199
-
-<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 18 02" src="https://github.com/user-attachments/assets/7db849e6-7a09-42bc-8f0e-78cca0050730" />
-<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 16 45" src="https://github.com/user-attachments/assets/4844503c-da03-4b0b-9832-5cad52aa6af8" />
-
 ---
 
 ## Table of contents
@@ -53,6 +42,17 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [References and resources](#references-and-resources)
 
 ---
+
+## How it works — high level
+
+<img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
+
+## The Dataset
+
+- COHERENT dataset -- https://www.mdpi.com/2079-9292/11/8/1199
+
+<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 18 02" src="https://github.com/user-attachments/assets/7db849e6-7a09-42bc-8f0e-78cca0050730" />
+<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 16 45" src="https://github.com/user-attachments/assets/4844503c-da03-4b0b-9832-5cad52aa6af8" />
 
 ## Quick start / How-To
 
