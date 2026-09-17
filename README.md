@@ -5,10 +5,6 @@
   <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
 </p>
 
-## How it works — high level
-
-<img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
-
 ## Federated learning of multimodal biomedical models across isolated data environments.
 
 <p align="center">
@@ -24,6 +20,10 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 <p align="center">
   <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
 </p>
+
+## How it works — high level
+
+<img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
 
 ## The Dataset
 
