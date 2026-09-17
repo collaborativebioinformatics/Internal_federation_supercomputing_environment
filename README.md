@@ -307,7 +307,7 @@ Model architecture and disease-specific model optimisation are handled separatel
 - Kalle Falk
 - Elise Delzant
 - Aditya Khadkikar
-- Thomas Lindestrand — writer
+- [Thomas Hansen](https://dk.linkedin.com/in/tlhan)
 - Shambhavi Pandey
 - Juan L Rodriguez Flores
 - Maria del Carmen Asencio
