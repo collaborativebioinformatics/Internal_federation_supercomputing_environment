@@ -10,11 +10,12 @@
 <img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
 
 ## Federated learning of multimodal biomedical models across isolated data environments.
-**Local data stay local, and the computation travels. Model parameters and embedding weights are aggregated.**
 
 <p align="center">
   <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
 </p>
+
+**Local data stay local, and the computation travels. Model parameters and embedding weights are aggregated.**
 
 SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
 
