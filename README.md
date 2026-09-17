@@ -21,6 +21,9 @@ Interesting work similar to this topic:
 
 The first proof of concept uses the multimodal RADIANT pediatric low-grade glioma dataset.
 
+- [Implementation checklist](implementation-checklist.md)
+- [Federation and data contract](data-contract.md)
 - [RADIANT-FL overview](docs/radiant-fl/README.md)
 - [Development flowchart](docs/radiant-fl/development-flowchart.md)
 - [Reference architecture](docs/radiant-fl/architecture.md)
+
