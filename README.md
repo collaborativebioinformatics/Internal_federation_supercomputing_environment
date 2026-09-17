@@ -255,7 +255,11 @@ The federation interface is intended to be deny-by-default.
 ## Key capabilities
 
 <p align="center">
-  <img src="docs/assets/superfedmmd-capabilities.png" width="100%" alt="Key SuperFedMMD capabilities including privacy-preserving federation, multimodal data, scalable Gefion infrastructure and reproducibility">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/superfedmmd-capabilities-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/superfedmmd-capabilities-light.png">
+    <img src="docs/assets/superfedmmd-capabilities-light.png" width="100%" alt="Key SuperFedMMD capabilities including privacy-preserving federation, multimodal data, scalable Gefion infrastructure and reproducibility">
+  </picture>
 </p>
 
 The infrastructure is intended to support heterogeneous multimodal sites, reproducible federated execution, controlled outbound communication and multi-institution collaboration without centralising the underlying biomedical source data.
