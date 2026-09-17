@@ -2,9 +2,13 @@
   <img src="docs/assets/superfedmmd-hero.png" width="100%" alt="SuperFedMMD concept: local biomedical data connected through Gefion without moving source data">
 </p>
 
-# SuperComputer Federated MultiModal Diagnostics
+# Supercomputer-based Federated Multimodal Diagnostics
 
-## Federated learning of multimodal biomedical models across isolated data environments
+## How it works — high level
+
+<img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
+
+**Federated learning of multimodal biomedical models across isolated data environments. Local data stay local, and the computation travels. Model parameters and embedding weights are aggregated.**
 
 SuperFedMMD is an infrastructure prototype for hospitals, biobanks and research environments that want to collaborate on multimodal biomedical AI while keeping patient-level source data under local control.
 
@@ -12,6 +16,10 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 
 <p align="center">
   <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
+</p>
+
+<p align="center">
+  <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
 </p>
 
 ---
@@ -111,16 +119,6 @@ redistribution
 ```
 
 The final reproducible run should record its Git commit, FLARE version, Gefion/runtime configuration, participating clients, federation configuration, round metadata and model/state identifiers.
-
----
-
-## How it works — high level
-
-<p align="center">
-  <img src="docs/assets/superfedmmd-high-level-flow.png" width="100%" alt="High-level SuperFedMMD flow from local data to local model execution, Gefion aggregation, updated model and shared insight">
-</p>
-
-**Local data stay local. The computation travels. Model knowledge is aggregated.**
 
 ---
 
