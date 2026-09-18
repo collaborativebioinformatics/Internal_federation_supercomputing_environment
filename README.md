@@ -28,8 +28,8 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [How it works — high level](#how-it-works--high-level)
 - [Quick start / How-To](#quick-start--how-to)
 - [Dataset - for demonstration](#the-dataset)
-- [Why this architecture?](#why-this-architecture)
 - [Architecture](#architecture)
+- [Why this architecture?](#why-this-architecture)
 - [Infrastructure method](#infrastructure-method)
 - [Data boundary](#data-boundary)
 - [Key capabilities](#key-capabilities)
@@ -132,22 +132,6 @@ The final reproducible run should record its Git commit, FLARE version, Gefion/r
 <img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 18 02" src="https://github.com/user-attachments/assets/7db849e6-7a09-42bc-8f0e-78cca0050730" />
 <img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 16 45" src="https://github.com/user-attachments/assets/4844503c-da03-4b0b-9832-5cad52aa6af8" />
 
-## Why this architecture?
-
-Modern biomedical models increasingly combine imaging, genomic, molecular and clinical information. The relevant datasets, however, are often distributed across institutions that cannot simply pool raw patient data into a single environment.
-
-SuperFedMMD addresses the infrastructure problem by moving a common, versioned execution workflow to participating data environments rather than moving the source datasets to the model.
-
-This motivates three architectural requirements:
-
-1. **Local data sovereignty** — patient-level data remain under the control of the originating environment.
-2. **Common execution contract** — participating sites expose compatible model-facing inputs and federation outputs.
-3. **Central coordination without centralised raw data** — Gefion and NVIDIA FLARE coordinate jobs, model-state exchange, aggregation and provenance.
-
-These requirements lead directly to the infrastructure method used below.
-
----
-
 ## Architecture
 
 ```mermaid
@@ -205,6 +189,22 @@ flowchart TB
 ```
 
 The **model is a pluggable component**. The SuperFed team focuses on the infrastructure around it: environment provisioning, federation, execution, data boundaries, orchestration and reproducibility.
+
+---
+
+## Why this architecture?
+
+Modern biomedical models increasingly combine imaging, genomic, molecular and clinical information. The relevant datasets, however, are often distributed across institutions that cannot simply pool raw patient data into a single environment.
+
+SuperFedMMD addresses the infrastructure problem by moving a common, versioned execution workflow to participating data environments rather than moving the source datasets to the model.
+
+This motivates three architectural requirements:
+
+1. **Local data sovereignty** — patient-level data remain under the control of the originating environment.
+2. **Common execution contract** — participating sites expose compatible model-facing inputs and federation outputs.
+3. **Central coordination without centralised raw data** — Gefion and NVIDIA FLARE coordinate jobs, model-state exchange, aggregation and provenance.
+
+These requirements lead directly to the infrastructure method used below.
 
 ---
 
