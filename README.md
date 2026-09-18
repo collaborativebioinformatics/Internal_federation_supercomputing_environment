@@ -387,7 +387,7 @@ Containerized execution and multi-client packing within a single GPU-node alloca
 ## The SuperFed team
 
 - Martin Thompsen
-- Kalle Falk
+- [Kalle Falk](https://www.linkedin.com/in/kalle-falk-611245175/)
 - Elise Delzant
 - Aditya Khadkikar
 - [Thomas Hansen](https://dk.linkedin.com/in/tlhan)
