@@ -33,7 +33,7 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [Infrastructure method](#infrastructure-method)
 - [Data boundary](#data-boundary)
 - [Key capabilities](#key-capabilities)
-- [Reference use case — RADIANT](#reference-use-case--radiant)
+- [Reference workload — Multimodal Healthcare](#reference-workload--multimodal-healthcare)
 - [Reproducibility and provenance](#reproducibility-and-provenance)
 - [Current project status](#current-project-status)
 - [Meet the team](#the-superfed-team)
@@ -267,13 +267,15 @@ The infrastructure is intended to support heterogeneous multimodal sites, reprod
 
 ---
 
-## Reference use case — RADIANT
+## Reference workload — Multimodal Healthcare
 
-RADIANT is used as the initial multimodal reference use case because it combines clinical, imaging-derived and molecular data.
+SuperFedMMD uses components from the [Multimodal Healthcare](https://github.com/multimodal-healthcare) project as its current reference workload. The project provides modality-specific pipelines spanning MRI, genomics, electronic health records, clinical data and ECG, together with multimodal fusion components.
 
-For infrastructure testing, subjects can be assigned to mutually exclusive virtual environments that emulate independent institutions. This allows the federation, local execution, modality handling, aggregation and provenance mechanisms to be exercised without making the infrastructure dependent on one particular model architecture.
+Within SuperFedMMD, these components are treated as **pluggable local workloads** rather than as part of the federation infrastructure itself. This allows the same Gefion/NVIDIA FLARE architecture to exercise heterogeneous biomedical workloads across isolated client environments while keeping the underlying source data local.
 
-The RADIANT-specific materials are maintained separately under [`docs/radiant-fl/`](docs/radiant-fl/).
+For federation testing, data can be partitioned across mutually exclusive virtual clients representing independent institutions. This makes it possible to validate distribution, local execution, parameter exchange, aggregation and provenance without coupling the infrastructure to a single model architecture or data modality.
+
+The demonstration dataset used in the current implementation is described in [The Dataset](#the-dataset) section above.
 
 ---
 
