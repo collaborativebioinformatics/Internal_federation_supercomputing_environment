@@ -217,24 +217,17 @@ For the current proof of concept, data separation is logical and configuration-b
 
 ## Infrastructure method
 
-A SuperFedMMD run starts from version-controlled code and configuration. The federation server and two logical clients are configured, and each client receives a distinct client-local data path.
+To explore how federated multimodal learning can be coordinated on shared high-performance infrastructure, we implemented a proof-of-concept workflow on **Gefion** using **NVIDIA FLARE** for federation and **Slurm** for compute execution. Two logically separated clients are configured with distinct local data partitions, allowing the same multimodal workload to be trained independently at each client without combining the underlying datasets. Project and site setup can be managed through NVIDIA FLARE's integrated **Dashboard UI**, providing a simple interface for configuring participants, provisioning clients and distributing the required startup packages.
 
-NVIDIA FLARE coordinates the active global model/state and the exchange of approved client updates. Compute-intensive local model training is submitted through Slurm rather than being executed directly as a heavy workload on the login environment.
+Each client submits its local training workload through Slurm and returns only approved model updates and aggregate metrics to the NVIDIA FLARE federation layer. These updates are aggregated into a new global model state and redistributed to the participating clients for subsequent training rounds. In the current hackathon implementation, both clients share the underlying Gefion environment; the proof of concept therefore demonstrates **federated orchestration, logical data separation and distributed model training**, rather than full institution-level security isolation.
 
-```mermaid
-flowchart LR
-    A["Versioned workload"] --> B["Configure federation"]
-    B --> C["Distribute global state"]
-    C --> D["Client-local Slurm training"]
-    D --> E["Validate outbound payload"]
-    E --> F["NVIDIA FLARE aggregation"]
-    F --> G["Updated global state"]
-    G --> C
-```
+<p align="center">
+  <img src="docs/assets/Methods.png" width="100%" alt="SuperFedMMD proof-of-concept method showing two logically separated NVIDIA FLARE clients, client-local multimodal data, Slurm GPU training on Gefion and federated model aggregation">
+</p>
 
-The exact aggregation strategy belongs to the active model/federation configuration rather than being fixed by the infrastructure.
+The model itself remains a **pluggable workload**: the infrastructure coordinates how training is executed and how model updates are exchanged, without coupling the federation to one particular model architecture or biomedical data modality.
 
-Detailed scientific and technical wording is maintained in [Methods](docs/methods.md).
+Detailed implementation and methodological information is available in [Methods](docs/methods.md).
 
 ---
 
