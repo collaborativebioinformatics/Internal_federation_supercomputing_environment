@@ -26,6 +26,7 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 ## Table of contents
 
 - [How it works — high level](#how-it-works--high-level)
+- [Dataset - for demonstration](#the-dataset)
 - [Quick start / How-To](#quick-start--how-to)
 - [Why this architecture?](#why-this-architecture)
 - [Architecture](#architecture)
