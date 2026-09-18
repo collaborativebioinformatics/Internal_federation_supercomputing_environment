@@ -55,7 +55,7 @@ The project uses **Gefion** as the shared high-performance computing environment
 <img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
 
 SuperFedMMD separates **federation orchestration** from **client-local training**. NVIDIA FLARE coordinates the exchange of model state and updates, while each logical client trains only on its own configured dataset. Compute-intensive training is submitted through Slurm.
-
+**Presentation:** [SuperFedMMD Mid-Term Presentation](docs/assets/Mid-Term%20Presentation%20-%20SuperFedMMD.pptx)
 ---
 
 ## Quick start / How-To
