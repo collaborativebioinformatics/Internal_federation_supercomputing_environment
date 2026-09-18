@@ -1,0 +1,205 @@
+Hello from dgx054.hpc.ite.dcai.dk at Fri Sep 18 10:05:19 CEST 2026
+Job ID:   507139
+Job dir:  /dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare
+2026-09-18 10:05:35,541 - INFO - model selection weights control: {}
+2026-09-18 10:05:37,453 - INFO - Initializing BaseModelController workflow.
+2026-09-18 10:05:37,454 - INFO - Beginning model controller run.
+2026-09-18 10:05:37,454 - INFO - 
+================================================================================
+                                 Start FedAvg.                                  
+================================================================================
+
+2026-09-18 10:05:37,454 - INFO - loading initial model from persistor
+2026-09-18 10:05:37,454 - INFO - Both source_ckpt_file_full_name and ckpt_preload_path are not provided. Using the default model weights initialized on the persistor side.
+2026-09-18 10:05:37,455 - INFO - 
+--------------------------------------------------------------------------------
+                                Round 0 started.                                
+--------------------------------------------------------------------------------
+
+2026-09-18 10:05:37,455 - INFO - Sampled clients: ['site-1', 'site-2']
+2026-09-18 10:05:37,455 - INFO - Sending task train to ['site-1', 'site-2']
+2026-09-18 10:05:39,557 - INFO - ClientTaskWorker started to run
+2026-09-18 10:05:39,558 - INFO - ClientTaskWorker started to run
+2026-09-18 10:05:40,427 - INFO - start task run() with full path: /tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py
+2026-09-18 10:05:40,428 - INFO - start task run() with full path: /tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py
+2026-09-18 10:05:40,429 - INFO - Initialize ClientRunner for client: site-2
+2026-09-18 10:05:40,430 - INFO - Initialize ClientRunner for client: site-1
+2026-09-18 10:05:40,437 - INFO - set transaction info: tx_id='Tef7e276e-5dd1-408b-98df-e081e58284e8', ref_id='fc102c00-f9f9-4f82-926c-66d58c73fb56' self.num_receivers=1
+2026-09-18 10:05:40,440 - INFO - set transaction info: tx_id='Tfcf29137-8825-4f57-aad8-406bf96f5abe', ref_id='52511f9c-77f8-494a-b1ae-9d15814e6f89' self.num_receivers=1
+2026-09-18 10:05:40,481 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:40,481 - INFO - execute for task (train)
+2026-09-18 10:05:40,481 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:40,487 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:40,487 - INFO - execute for task (train)
+2026-09-18 10:05:40,488 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:42,401 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:42,401 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:43,650 - INFO - site = site-2, current_round=0
+2026-09-18 10:05:43,651 - INFO - site = site-1, current_round=0
+2026-09-18 10:05:43,953 - INFO - Accuracy of the network on 100 test images: 1.00%
+2026-09-18 10:05:43,965 - INFO - Accuracy of the network on 100 test images: 1.00%
+2026-09-18 10:05:45,955 - INFO - site=site-2, epoch=1/1, loss=2.3022
+2026-09-18 10:05:45,961 - INFO - Finished Training for site-2
+2026-09-18 10:05:45,980 - INFO - site=site-1, epoch=1/1, loss=2.3030
+2026-09-18 10:05:45,990 - INFO - Finished Training for site-1
+2026-09-18 10:05:46,267 - INFO - Accuracy of the network on 100 test images: 20.00%
+2026-09-18 10:05:46,280 - INFO - site: site-2, sending model to server.
+2026-09-18 10:05:46,401 - INFO - Accuracy of the network on 100 test images: 20.00%
+2026-09-18 10:05:46,411 - INFO - site: site-1, sending model to server.
+2026-09-18 10:05:46,447 - INFO - set transaction info: tx_id='T7288e22f-1e7b-4445-8156-d2775ecafc66', ref_id='a87b2fa0-ea81-4dc6-a832-88ee6dbfd9f7' self.num_receivers=1
+2026-09-18 10:05:46,452 - INFO - set transaction info: tx_id='T2a817963-dd3e-4435-9fc1-cc21a343e5e8', ref_id='9f035c06-68ca-4af4-9a61-ae46fe349e16' self.num_receivers=1
+2026-09-18 10:05:46,470 - INFO - Aggregated 1/2 results
+2026-09-18 10:05:46,471 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:46,474 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:46,476 - INFO - Aggregated 2/2 results
+2026-09-18 10:05:46,477 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 10:05:46,480 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 10:05:46,965 - INFO - Start persist model on server.
+2026-09-18 10:05:46,973 - INFO - End persist model on server.
+2026-09-18 10:05:46,973 - INFO - 
+--------------------------------------------------------------------------------
+                                Round 1 started.                                
+--------------------------------------------------------------------------------
+
+2026-09-18 10:05:46,974 - INFO - Sampled clients: ['site-1', 'site-2']
+2026-09-18 10:05:46,974 - INFO - Sending task train to ['site-1', 'site-2']
+2026-09-18 10:05:48,486 - INFO - set transaction info: tx_id='T693de2e1-7981-4008-8cd4-5ebb689cea36', ref_id='a2da1ab0-f8cf-4bba-83e9-e08052fec2c3' self.num_receivers=1
+2026-09-18 10:05:48,488 - INFO - set transaction info: tx_id='Tadfa52aa-2d0f-4ea2-bb1b-df342d2e5151', ref_id='79191193-0433-4ff1-b768-85c68d484558' self.num_receivers=1
+2026-09-18 10:05:48,505 - INFO - execute for task (train)
+2026-09-18 10:05:48,506 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:48,507 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:48,509 - INFO - execute for task (train)
+2026-09-18 10:05:48,509 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:48,509 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:48,510 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:48,511 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:48,782 - INFO - site = site-2, current_round=1
+2026-09-18 10:05:48,915 - INFO - site = site-1, current_round=1
+2026-09-18 10:05:48,953 - INFO - Accuracy of the network on 100 test images: 30.00%
+2026-09-18 10:05:49,194 - INFO - Accuracy of the network on 100 test images: 30.00%
+2026-09-18 10:05:49,315 - INFO - site=site-1, epoch=1/1, loss=2.2588
+2026-09-18 10:05:49,328 - INFO - Finished Training for site-1
+2026-09-18 10:05:49,636 - INFO - Accuracy of the network on 100 test images: 40.00%
+2026-09-18 10:05:49,645 - INFO - site: site-1, sending model to server.
+2026-09-18 10:05:49,911 - INFO - site=site-2, epoch=1/1, loss=2.2540
+2026-09-18 10:05:49,913 - INFO - Finished Training for site-2
+2026-09-18 10:05:49,919 - INFO - Accuracy of the network on 100 test images: 70.00%
+2026-09-18 10:05:49,921 - INFO - site: site-2, sending model to server.
+2026-09-18 10:05:50,025 - INFO - set transaction info: tx_id='Tdcc3a57c-5d89-4645-9465-bc667f7f80d9', ref_id='85f66eff-c6ba-4980-99c0-083cc95eae62' self.num_receivers=1
+2026-09-18 10:05:50,028 - INFO - set transaction info: tx_id='T6871a6f1-987b-4d03-a158-fe1bd1d34e8b', ref_id='19e11ce6-e41a-48ce-aef3-32eff79e9371' self.num_receivers=1
+2026-09-18 10:05:50,043 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:50,043 - INFO - validation metric 30.0 from client site-1
+2026-09-18 10:05:50,045 - INFO - Aggregated 1/2 results
+2026-09-18 10:05:50,047 - INFO - validation metric 30.0 from client site-2
+2026-09-18 10:05:50,048 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:50,049 - INFO - Aggregated 2/2 results
+2026-09-18 10:05:50,049 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 10:05:50,052 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 10:05:50,476 - INFO - new best validation metric at round 1: 30.0
+2026-09-18 10:05:50,482 - INFO - Start persist model on server.
+2026-09-18 10:05:50,487 - INFO - End persist model on server.
+2026-09-18 10:05:50,487 - INFO - 
+--------------------------------------------------------------------------------
+                                Round 2 started.                                
+--------------------------------------------------------------------------------
+
+2026-09-18 10:05:50,488 - INFO - Sampled clients: ['site-1', 'site-2']
+2026-09-18 10:05:50,488 - INFO - Sending task train to ['site-1', 'site-2']
+2026-09-18 10:05:52,059 - INFO - set transaction info: tx_id='Tbf907a48-c217-4472-ad05-df4c644ce011', ref_id='2924aeef-6199-437c-b6cd-fb66e167a605' self.num_receivers=1
+2026-09-18 10:05:52,060 - INFO - set transaction info: tx_id='Taf665f36-4930-4b31-ba4c-3cf75a4bc9a7', ref_id='fba0ab16-ea77-42cf-a7d0-2a967fc1f292' self.num_receivers=1
+2026-09-18 10:05:52,075 - INFO - execute for task (train)
+2026-09-18 10:05:52,076 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:52,076 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:52,077 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:52,078 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:52,078 - INFO - execute for task (train)
+2026-09-18 10:05:52,079 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:52,080 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:52,150 - INFO - site = site-1, current_round=2
+2026-09-18 10:05:52,308 - INFO - Accuracy of the network on 100 test images: 70.00%
+2026-09-18 10:05:52,332 - INFO - site=site-1, epoch=1/1, loss=1.5092
+2026-09-18 10:05:52,337 - INFO - Finished Training for site-1
+2026-09-18 10:05:52,344 - INFO - Accuracy of the network on 100 test images: 80.00%
+2026-09-18 10:05:52,346 - INFO - site: site-1, sending model to server.
+2026-09-18 10:05:52,423 - INFO - site = site-2, current_round=2
+2026-09-18 10:05:52,431 - INFO - Accuracy of the network on 100 test images: 70.00%
+2026-09-18 10:05:52,453 - INFO - site=site-2, epoch=1/1, loss=1.6199
+2026-09-18 10:05:52,455 - INFO - Finished Training for site-2
+2026-09-18 10:05:52,462 - INFO - Accuracy of the network on 100 test images: 50.00%
+2026-09-18 10:05:52,463 - INFO - site: site-2, sending model to server.
+2026-09-18 10:05:52,589 - INFO - set transaction info: tx_id='Ta1ed1e12-00b0-41e4-b21c-4b0bc28b7cca', ref_id='b923ccce-4254-4bce-a826-f57dec8708af' self.num_receivers=1
+2026-09-18 10:05:52,589 - INFO - set transaction info: tx_id='Te146c7c4-bfcc-4785-92b6-97255ecbcda4', ref_id='ee3ae49a-8d82-43ac-93fd-b8e607801722' self.num_receivers=1
+2026-09-18 10:05:52,604 - INFO - validation metric 70.0 from client site-2
+2026-09-18 10:05:52,606 - INFO - Aggregated 1/2 results
+2026-09-18 10:05:52,606 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:52,609 - INFO - validation metric 70.0 from client site-1
+2026-09-18 10:05:52,610 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:52,611 - INFO - Aggregated 2/2 results
+2026-09-18 10:05:52,611 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 10:05:52,613 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 10:05:52,989 - INFO - new best validation metric at round 2: 70.0
+2026-09-18 10:05:52,996 - INFO - Start persist model on server.
+2026-09-18 10:05:53,000 - INFO - End persist model on server.
+2026-09-18 10:05:53,002 - INFO - 
+================================================================================
+                                Finished FedAvg.                                
+================================================================================
+
+2026-09-18 10:05:53,003 - INFO - Formatter not found. Stats will not be printed.
+2026-09-18 10:05:53,004 - INFO - Beginning model validation with clients: ['site-1', 'site-2'].
+2026-09-18 10:05:53,005 - INFO - Locating server models.
+2026-09-18 10:05:53,009 - INFO - Server models loaded: ['SRV_FL_global_model.pt', 'SRV_best_FL_global_model.pt'].
+2026-09-18 10:05:53,009 - INFO - Sending SRV_FL_global_model.pt model to all participating clients for validation.
+2026-09-18 10:05:53,010 - INFO - Sending SRV_best_FL_global_model.pt model to all participating clients for validation.
+2026-09-18 10:05:54,621 - INFO - set transaction info: tx_id='T17e72d50-17bb-4fea-a178-47b72579b349', ref_id='8912475e-3c48-4cf2-b64f-00ae64172306' self.num_receivers=1
+2026-09-18 10:05:54,624 - INFO - set transaction info: tx_id='Tc52fd828-abb8-4859-b357-1c886560f065', ref_id='af37b40c-5277-4c8a-966a-3cd05a1d3964' self.num_receivers=1
+2026-09-18 10:05:54,635 - INFO - execute for task (validate)
+2026-09-18 10:05:54,635 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:54,636 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:54,636 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:54,639 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:54,639 - INFO - execute for task (validate)
+2026-09-18 10:05:54,640 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:54,641 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:54,847 - INFO - site = site-1, current_round=None
+2026-09-18 10:05:54,856 - INFO - Accuracy of the network on 100 test images: 75.00%
+2026-09-18 10:05:54,857 - INFO - site = site-1, running cross-site evaluation
+2026-09-18 10:05:54,965 - INFO - site = site-2, current_round=None
+2026-09-18 10:05:55,001 - INFO - Accuracy of the network on 100 test images: 77.00%
+2026-09-18 10:05:55,002 - INFO - site = site-2, running cross-site evaluation
+2026-09-18 10:05:55,150 - INFO - Saved validation result from client 'site-2' on model 'SRV_FL_global_model.pt' in /tmp/nvflare/simulation/hello-pt/server/simulate_job/cross_site_val/result_shareables/site-2_SRV_FL_global_model.pt
+2026-09-18 10:05:55,152 - INFO - Saved validation result from client 'site-1' on model 'SRV_FL_global_model.pt' in /tmp/nvflare/simulation/hello-pt/server/simulate_job/cross_site_val/result_shareables/site-1_SRV_FL_global_model.pt
+2026-09-18 10:05:55,154 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 10:05:55,156 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 10:05:57,164 - INFO - set transaction info: tx_id='Tb16b38a7-c3c8-49c8-ac51-5f558e33628f', ref_id='6f2ea892-2d03-4171-b733-4217f510f823' self.num_receivers=1
+2026-09-18 10:05:57,167 - INFO - set transaction info: tx_id='T779a96c1-68fa-4645-a9a4-10ad26c99db2', ref_id='af9a2130-6218-45e7-8899-1be1cab04b59' self.num_receivers=1
+2026-09-18 10:05:57,181 - INFO - execute for task (validate)
+2026-09-18 10:05:57,182 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:57,183 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:57,184 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:57,184 - INFO - execute for task (validate)
+2026-09-18 10:05:57,185 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 10:05:57,185 - INFO - sending task data to in-process trainer
+2026-09-18 10:05:57,186 - INFO - waiting for result from in-process trainer
+2026-09-18 10:05:57,358 - INFO - site = site-1, current_round=None
+2026-09-18 10:05:57,367 - INFO - Accuracy of the network on 100 test images: 70.00%
+2026-09-18 10:05:57,367 - INFO - site = site-1, running cross-site evaluation
+2026-09-18 10:05:57,503 - INFO - site = site-2, current_round=None
+2026-09-18 10:05:57,512 - INFO - Accuracy of the network on 100 test images: 70.00%
+2026-09-18 10:05:57,513 - INFO - site = site-2, running cross-site evaluation
+2026-09-18 10:05:57,694 - INFO - Saved validation result from client 'site-2' on model 'SRV_best_FL_global_model.pt' in /tmp/nvflare/simulation/hello-pt/server/simulate_job/cross_site_val/result_shareables/site-2_SRV_best_FL_global_model.pt
+2026-09-18 10:05:57,697 - INFO - Saved validation result from client 'site-1' on model 'SRV_best_FL_global_model.pt' in /tmp/nvflare/simulation/hello-pt/server/simulate_job/cross_site_val/result_shareables/site-1_SRV_best_FL_global_model.pt
+2026-09-18 10:05:57,699 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 10:05:57,700 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 10:05:59,708 - WARNING - ask to stop job: reason: END_RUN received
+2026-09-18 10:05:59,709 - WARNING - ask to stop job: reason: END_RUN received
+2026-09-18 10:05:59,869 - WARNING - request to stop the job for reason END_RUN received
+2026-09-18 10:05:59,872 - INFO - End the Simulator run.
+2026-09-18 10:06:00,014 - WARNING - request to stop the job for reason END_RUN received
+2026-09-18 10:06:00,022 - INFO - End the Simulator run.
+Note, get_status returns None in SimEnv. The simulation logs can be found at /tmp/nvflare/simulation/hello-pt
+
+Simulation completed successfully.
+Result can be found in : /tmp/nvflare/simulation/hello-pt
+
+Done.

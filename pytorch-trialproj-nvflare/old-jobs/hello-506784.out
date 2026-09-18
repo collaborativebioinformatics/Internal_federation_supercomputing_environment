@@ -1,0 +1,38 @@
+Hello from dgx065 at Thu Sep 17 16:52:48 CEST 2026
+Job ID:   506784
+Job dir:  /dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare
+Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/job.py", line 93, in <module>
+    main()
+    ~~~~^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/job.py", line 77, in main
+    recipe = create_recipe(args)
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/job.py", line 56, in create_recipe
+    recipe = FedAvgRecipe(
+        name="hello-pt",
+    ...<9 lines>...
+        train_args=train_args,
+    )
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_opt/pt/recipes/fedavg.py", line 151, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        name=name,
+        ^^^^^^^^^^
+    ...<29 lines>...
+        cuda_empty_cache=cuda_empty_cache,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/recipe/fedavg.py", line 264, in __init__
+    v = _FedAvgValidator(
+        name=name,
+    ...<29 lines>...
+        cuda_empty_cache=cuda_empty_cache,
+    )
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for _FedAvgValidator
+train_args
+  Input should be a valid string [type=string_type, input_value=['--dataset', 'synthetic'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.13/v/string_type
+Done.

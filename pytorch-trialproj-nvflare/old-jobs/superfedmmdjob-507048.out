@@ -1,0 +1,263 @@
+Hello from dgx092 at Fri Sep 18 09:13:21 CEST 2026
+Job ID:   507048
+Job dir:  /dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare
+2026-09-18 09:13:38,513 - INFO - model selection weights control: {}
+2026-09-18 09:13:40,596 - INFO - Initializing BaseModelController workflow.
+2026-09-18 09:13:40,597 - INFO - Beginning model controller run.
+2026-09-18 09:13:40,597 - INFO - 
+================================================================================
+                                 Start FedAvg.                                  
+================================================================================
+
+2026-09-18 09:13:40,598 - INFO - loading initial model from persistor
+2026-09-18 09:13:40,598 - INFO - Both source_ckpt_file_full_name and ckpt_preload_path are not provided. Using the default model weights initialized on the persistor side.
+2026-09-18 09:13:40,599 - INFO - 
+--------------------------------------------------------------------------------
+                                Round 0 started.                                
+--------------------------------------------------------------------------------
+
+2026-09-18 09:13:40,599 - INFO - Sampled clients: ['site-1', 'site-2']
+2026-09-18 09:13:40,600 - INFO - Sending task train to ['site-1', 'site-2']
+2026-09-18 09:13:43,501 - INFO - ClientTaskWorker started to run
+2026-09-18 09:13:43,504 - INFO - ClientTaskWorker started to run
+2026-09-18 09:13:44,374 - INFO - start task run() with full path: /tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py
+2026-09-18 09:13:44,375 - INFO - start task run() with full path: /tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py
+2026-09-18 09:13:44,375 - INFO - Initialize ClientRunner for client: site-2
+2026-09-18 09:13:44,375 - INFO - Initialize ClientRunner for client: site-1
+2026-09-18 09:13:44,385 - INFO - set transaction info: tx_id='T18662447-7922-4bf7-a653-0e430c793dfe', ref_id='12be7a62-7876-4206-9d19-14cbd27c25b1' self.num_receivers=1
+2026-09-18 09:13:44,387 - INFO - set transaction info: tx_id='T1af647e4-d7fe-4f0e-b523-aefb6212eac3', ref_id='b82e9890-5452-4bed-a0cf-774a3f551f08' self.num_receivers=1
+2026-09-18 09:13:44,431 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 09:13:44,432 - INFO - execute for task (train)
+2026-09-18 09:13:44,433 - INFO - sending task data to in-process trainer
+2026-09-18 09:13:44,439 - INFO - execute for task (train)
+2026-09-18 09:13:44,439 - INFO - sending task data to in-process trainer
+2026-09-18 09:13:44,440 - INFO - object has been downloaded to all 1 receivers - clear cache
+2026-09-18 09:13:46,587 - INFO - waiting for result from in-process trainer
+2026-09-18 09:13:46,587 - INFO - waiting for result from in-process trainer
+2026-09-18 09:13:49,280 - ERROR - Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+
+2026-09-18 09:13:49,280 - ERROR - Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+
+2026-09-18 09:13:49,280 - ERROR - fire abort event
+2026-09-18 09:13:49,281 - ERROR - fire abort event
+2026-09-18 09:13:49,281 - ERROR - ask to abort job: reason: '/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py' is aborted, Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+
+2026-09-18 09:13:49,282 - ERROR - ask to abort job: reason: '/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py' is aborted, Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+
+Exception in thread client_api_in_process_trainer:
+Exception in thread client_api_in_process_trainer:
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/dcai/software/modules/dgxos/software/Python/3.13.5-GCCcore-14.3.0/lib/python3.13/threading.py", line 1043, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "/dcai/software/modules/dgxos/software/Python/3.13.5-GCCcore-14.3.0/lib/python3.13/threading.py", line 994, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 111, in run
+    raise e
+  File "/dcai/software/modules/dgxos/software/Python/3.13.5-GCCcore-14.3.0/lib/python3.13/threading.py", line 1043, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "/dcai/software/modules/dgxos/software/Python/3.13.5-GCCcore-14.3.0/lib/python3.13/threading.py", line 994, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 111, in run
+    raise e
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/executors/task_script_runner.py", line 95, in run
+    runpy.run_path(self.script_full_path, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 209, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/nvflare/simulation/hello-pt/site-1/simulate_job/app_site-1/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 117, in main
+    train_loader, test_loader = create_data_loaders(
+                                ~~~~~~~~~~~~~~~~~~~^
+        dataset=args.dataset,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        data_root=args.data_root,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/nvflare/simulation/hello-pt/site-2/simulate_job/app_site-2/custom/client.py", line 65, in create_data_loaders
+    validate_cifar10(data_root)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/prepare_data.py", line 117, in validate_cifar10
+    raise FileNotFoundError(
+        f"Missing or empty CIFAR-10 files under {batch_dir}: {', '.join(missing)}. Run `{command}` before starting clients."
+    )
+FileNotFoundError: Missing or empty CIFAR-10 files under /tmp/nvflare/data/cifar-10-batches-py: data_batch_1, data_batch_2, data_batch_3, data_batch_4, data_batch_5, test_batch, batches.meta. Run `python prepare_data.py --data_root /tmp/nvflare/data` before starting clients.
+2026-09-18 09:13:49,589 - ERROR - ask to abort job: reason: 'train' is aborted, abort_signal_triggered
+2026-09-18 09:13:49,592 - ERROR - ask to abort job: reason: 'train' is aborted, abort_signal_triggered
+2026-09-18 09:13:49,599 - ERROR - shareable data is not a valid DXO. Received Exception: ValueError: the shareable is not a valid DXO - expect content_type DXO but got None
+2026-09-18 09:13:49,607 - ERROR - Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/app_common/widgets/intime_model_selector.py", line 120, in _before_accept
+    dxo = from_shareable(shareable)
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/apis/dxo.py", line 168, in from_shareable
+    raise ValueError(f"the shareable is not a valid DXO - expect content_type DXO but got {content_type}")
+ValueError: the shareable is not a valid DXO - expect content_type DXO but got None
+
+2026-09-18 09:13:49,608 - ERROR - Aborting current RUN due to FATAL_SYSTEM_ERROR received: Result from site-2 is bad, error code: TASK_ABORTED. Cannot reach min_responses: remaining good clients (1) < min_responses (2). FedAvg exiting at round None.
+2026-09-18 09:13:49,611 - INFO - Finished one task run for client: site-2 interval: 2 task_processed: True
+2026-09-18 09:13:49,613 - INFO - Finished one task run for client: site-1 interval: 2 task_processed: True
+2026-09-18 09:13:50,102 - INFO - Abort signal triggered. Finishing FedAvg.
+2026-09-18 09:13:51,618 - WARNING - ask to stop job: reason: END_RUN received
+2026-09-18 09:13:51,619 - INFO - End the Simulator run.
+2026-09-18 09:13:51,620 - WARNING - ask to stop job: reason: END_RUN received
+2026-09-18 09:13:51,621 - INFO - End the Simulator run.
+Traceback (most recent call last):
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/job.py", line 95, in <module>
+    main()
+    ~~~~^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/pytorch-trialproj-nvflare/job.py", line 82, in main
+    run = recipe.execute(env)
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/recipe/spec.py", line 944, in execute
+    return self.run(env, server_exec_params=server_exec_params, client_exec_params=client_exec_params)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/recipe/spec.py", line 904, in run
+    job_id = env.deploy(self._job)
+  File "/dcai/projects/iu_0141/team6-superfedmmd/venv/lib/python3.13/site-packages/nvflare/recipe/sim_env.py", line 136, in deploy
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Simulation failed with return code 2. Logs are in per-site subdirectories under /tmp/nvflare/simulation/hello-pt, e.g. server/simulate_job/log.txt
+Done.
