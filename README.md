@@ -36,7 +36,7 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [Reference use case — RADIANT](#reference-use-case--radiant)
 - [Reproducibility and provenance](#reproducibility-and-provenance)
 - [Current project status](#current-project-status)
-- [Team 6](#team-6)
+- [Meet the team](#the-superfed-team)
 - [Documentation](#documentation)
 - [Appendix](#appendix)
 - [References and resources](#references-and-resources)
@@ -204,7 +204,7 @@ flowchart TB
     SERVER <-->|"job / global state ↔ approved update + metrics"| CC
 ```
 
-The **model is a pluggable component**. Team 6 focuses on the infrastructure around it: environment provisioning, federation, execution, data boundaries, orchestration and reproducibility.
+The **model is a pluggable component**. The SuperFed team focuses on the infrastructure around it: environment provisioning, federation, execution, data boundaries, orchestration and reproducibility.
 
 ---
 
@@ -304,11 +304,11 @@ Documentation should distinguish clearly between **target architecture**, **impl
 
 SuperFedMMD is under active development during the hackathon. The immediate infrastructure work focuses on Gefion execution, NVIDIA FLARE server/client setup, job packaging, secluded/simulated environments, local execution interfaces, outbound data boundaries, logging and an end-to-end reproducible federation round.
 
-Model architecture and disease-specific model optimisation are handled separately from the primary Team 6 infrastructure workstream.
+Model architecture and disease-specific model optimisation are handled separately from the primary the SuperFed team infrastructure workstream.
 
 ---
 
-## Team 6
+## The SuperFed team
 
 - Martin Thompsen
 - Kalle Falk
