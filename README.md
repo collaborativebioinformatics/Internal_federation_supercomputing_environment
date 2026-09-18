@@ -326,10 +326,10 @@ Model architecture and disease-specific model optimisation are handled separatel
 ## Documentation
 
 - [Methods — infrastructure and federation](docs/methods.md)
-- [RADIANT-FL overview](docs/radiant-fl/README.md)
+- [Federated workflow proof of concept](docs/radiant-fl/README.md)
 - [Reference architecture](docs/radiant-fl/architecture.md)
 - [Development flowchart](docs/radiant-fl/development-flowchart.md)
-- [Federation and data contract](docs/radiant-fl/data-contract.md)
+- [Data and federation contract](docs/radiant-fl/data-contract.md)
 
 ### Appendix
 
@@ -339,8 +339,5 @@ Model architecture and disease-specific model optimisation are handled separatel
 
 ## References and resources
 
-- RADIANT public dataset: https://registry.opendata.aws/radiant/
-- RADIANT paper: https://pmc.ncbi.nlm.nih.gov/articles/PMC11697432/
-- Associated RADIANT analysis repository: https://github.com/d3b-center/pLGG-immune-clinicoradiomics
 - NVIDIA FLARE: https://github.com/NVIDIA/NVFlare
 - NVIDIA FLARE documentation: https://nvflare.readthedocs.io/en/main/index.html
