@@ -26,8 +26,8 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 ## Table of contents
 
 - [How it works — high level](#how-it-works--high-level)
-- [Dataset - for demonstration](#the-dataset)
 - [Quick start / How-To](#quick-start--how-to)
+- [Dataset - for demonstration](#the-dataset)
 - [Why this architecture?](#why-this-architecture)
 - [Architecture](#architecture)
 - [Infrastructure method](#infrastructure-method)
@@ -46,13 +46,6 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 ## How it works — high level
 
 <img width="100%" height="auto" alt="Mid-Term Presentation - SuperFedMMD" src="https://github.com/user-attachments/assets/1df7de99-945a-4b6d-a61f-4051fa6202e2" />
-
-## The Dataset
-
-- COHERENT dataset -- https://www.mdpi.com/2079-9292/11/8/1199
-
-<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 18 02" src="https://github.com/user-attachments/assets/7db849e6-7a09-42bc-8f0e-78cca0050730" />
-<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 16 45" src="https://github.com/user-attachments/assets/4844503c-da03-4b0b-9832-5cad52aa6af8" />
 
 ## Quick start / How-To
 
@@ -131,6 +124,13 @@ redistribution
 The final reproducible run should record its Git commit, FLARE version, Gefion/runtime configuration, participating clients, federation configuration, round metadata and model/state identifiers.
 
 ---
+
+## The Dataset
+
+- COHERENT dataset -- https://www.mdpi.com/2079-9292/11/8/1199
+
+<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 18 02" src="https://github.com/user-attachments/assets/7db849e6-7a09-42bc-8f0e-78cca0050730" />
+<img width="100%" height="auto" alt="Screenshot 2026-09-17 at 15 16 45" src="https://github.com/user-attachments/assets/4844503c-da03-4b0b-9832-5cad52aa6af8" />
 
 ## Why this architecture?
 
