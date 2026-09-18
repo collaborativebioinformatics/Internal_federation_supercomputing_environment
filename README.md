@@ -33,7 +33,7 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [Infrastructure method](#infrastructure-method)
 - [Data boundary](#data-boundary)
 - [Key capabilities](#key-capabilities)
-- [Reference workload — Multimodal Healthcare](#reference-workload--multimodal-healthcare)
+- [Reference workload - Multimodal Healthcare](#reference-workload---multimodal-healthcare)
 - [Reproducibility and provenance](#reproducibility-and-provenance)
 - [Current project status](#current-project-status)
 - [Meet the team](#the-superfed-team)
