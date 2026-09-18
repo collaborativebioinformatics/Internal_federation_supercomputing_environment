@@ -60,20 +60,22 @@ cd SuperFedMMD
 
 ### 2. Prepare the federation
 
-The target topology consists of one federation/control plane associated with Gefion and multiple isolated client environments.
+The hackathon proof of concept uses **two logically separated NVIDIA FLARE clients within the shared Gefion environment**. Each client is configured with its own training-data directory, while compute-intensive local training is submitted through Slurm.
 
 ```text
-Gefion
-└── NVIDIA FLARE server / federation coordinator
-
-Secluded environment A
-└── NVIDIA FLARE client + local data + supplied model
-
-Secluded environment B
-└── NVIDIA FLARE client + local data + supplied model
-
-Secluded environment C
-└── NVIDIA FLARE client + local data + supplied model
+Gefion shared environment
+│
+├── NVIDIA FLARE server / federation coordinator
+│
+├── Logical client A
+│   ├── NVIDIA FLARE client
+│   ├── client-specific data directory
+│   └── local training → Slurm
+│
+└── Logical client B
+    ├── NVIDIA FLARE client
+    ├── client-specific data directory
+    └── local training → Slurm
 ```
 
 Each participating environment must implement the same versioned federation/data contract.
