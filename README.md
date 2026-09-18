@@ -12,12 +12,10 @@
   <img src="docs/assets/superfedmmd-audiences.png" width="100%" alt="How SuperFedMMD can support researchers, clinicians, data custodians and the broader community">
 </p>
 
-<p align="center">
-  <strong><em>
-    Local data stay local, and the computation travels.<br>
-    Model parameters and model updates are aggregated.
-  </em></strong>
-</p>
+<h2 align="center">
+  <em>Local data stay local, and the computation travels.<br>
+  Model parameters and model updates are aggregated.</em>
+</h2>
 
 SuperFedMMD is an infrastructure proof of concept for federated multimodal biomedical AI. The hackathon implementation demonstrates how **two logically separated data sites** can participate in a common federated learning workflow on Gefion without combining their underlying training datasets.
 
