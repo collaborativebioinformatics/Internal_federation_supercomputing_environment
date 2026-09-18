@@ -267,7 +267,7 @@ The infrastructure is intended to support heterogeneous multimodal sites, reprod
 
 ---
 
-## Reference workload — Multimodal Healthcare
+## Reference workload - Multimodal Healthcare
 
 SuperFedMMD uses components from the [Multimodal Healthcare](https://github.com/multimodal-healthcare) project as its current reference workload. The project provides modality-specific pipelines spanning MRI, genomics, electronic health records, clinical data and ECG, together with multimodal fusion components.
 
