@@ -1,80 +1,125 @@
-# RADIANT-FL proof of concept
+# SuperFedMMD federated workflow proof of concept
 
-This directory describes a proof-of-concept for federated multimodal learning on the RADIANT pediatric low-grade glioma dataset, coordinated from the Gefion HPC environment and trained across multiple isolated/secluded environments.
+> **Path note:** This document is retained under the historical `docs/radiant-fl/` path to avoid breaking existing repository links. The active proof of concept is no longer RADIANT-specific.
 
 ## Objective
 
-Demonstrate that multiple isolated environments can collaboratively train a multimodal progression-risk model without exchanging patient-level data.
+Demonstrate that **two logically independent data sites can participate in a federated learning workflow coordinated on Gefion without combining their training datasets**, using NVIDIA FLARE as the federation layer.
 
-The proof of concept uses RADIANT as the reference dataset and treats participating environments as virtual institutions with subject-disjoint, deliberately heterogeneous local cohorts.
+The current proof of concept uses client-specific data partitions and a multimodal model workload derived from the [Multimodal Healthcare](https://github.com/multimodal-healthcare) project.
 
-### Primary prediction task
+The demonstration dataset itself is described in the top-level README and is not repeated here.
 
-- progression-free survival / progression risk
+## Current proof-of-concept topology
 
-### Initial modalities
+The hackathon implementation represents independent sites as **logically separated NVIDIA FLARE clients inside a shared Gefion environment**.
 
-- clinical variables
-- MRI-derived radiomic features
-- transcriptomics / RNA-seq
+Each client should:
 
-### Optional later extension
+- have its own FLARE identity/configuration;
+- use its own client-specific training-data directory;
+- not be configured with access to a shared training-data folder;
+- submit compute-intensive local training through Slurm; and
+- return only approved model updates/parameters and aggregate metrics.
 
-- WGS-derived features
+The NVIDIA FLARE server/coordinator manages federation state and aggregation.
 
-## Experimental design
+```text
+Gefion access environment
+    |
+    +-- NVIDIA FLARE server / coordinator
+    |
+    +-- Client A control process
+    |      |
+    |      +-- client A data only
+    |      +-- Slurm training job
+    |
+    +-- Client B control process
+           |
+           +-- client B data only
+           +-- Slurm training job
 
-The original discovery/replication concept is preserved.
+Slurm
+    |
+    +-- allocates compute resources for client-local training
+```
 
-- Discovery data are partitioned into multiple virtual sites.
-- Patient identities are mutually exclusive between sites.
-- Site distributions are intentionally non-IID where practical.
-- The replication cohort remains untouched by federated training and is reserved for final evaluation.
+## Reference workload
 
-Three model settings should be compared:
+The current model workload is based on components from:
 
-1. **Local** — each site trains independently.
-2. **Centralised** — pooled discovery data provide a reference baseline.
-3. **Federated** — the same discovery subjects are distributed across sites and only approved model updates/metrics cross site boundaries.
+- https://github.com/multimodal-healthcare
+
+The infrastructure treats the model as a pluggable workload. The exact fusion-model revision, active modalities, labels and preprocessing configuration used in the final demo must be recorded with the run.
+
+## Dataset inspection
+
+Before federated execution, the client partitions should be characterised with reproducible analysis code.
+
+Useful descriptive checks include:
+
+- record count per client;
+- positive/negative label counts where applicable;
+- image/category distributions where applicable;
+- modality availability;
+- missingness; and
+- verification that client A and client B use distinct local data partitions.
 
 ## Definition of done
 
-**Deadline: Friday 18 September 2026, 17:00 CEST**
+A successful proof of concept demonstrates the complete path:
 
-A successful prototype demonstrates the complete path:
-
-`global model -> site-local training -> approved update -> aggregation on Gefion -> redistributed global model -> local validation`
+```text
+global model/state
+    ->
+two FLARE clients
+    ->
+client-local Slurm training
+    ->
+approved update/metrics
+    ->
+FLARE aggregation
+    ->
+updated global state
+    ->
+redistribution
+```
 
 with:
 
-- at least 3 simulated secluded environments
-- subject-disjoint local cohorts
-- multimodal inputs
-- no transfer of raw patient-level data between environments
-- reproducible configuration
-- audit/logging of federation rounds
-- independent evaluation on the held-out RADIANT replication cohort
-- comparison of local, centralised and federated performance
+- at least **2 logically independent clients**;
+- distinct client-local training datasets;
+- no shared training-data directory required by the client configuration;
+- NVIDIA FLARE coordinating the federation;
+- local compute submitted through Slurm;
+- model/update exchange and aggregation demonstrated;
+- no raw training records transferred through the federation;
+- reproducible configuration and logs; and
+- final model/output artifacts located and documented.
 
-## Delivery plan
+## Security interpretation
 
-| Time | Deliverable |
-|---|---|
-| Wednesday evening | Freeze task, modalities, patient manifest, discovery/replication logic and federation contract |
-| Thursday morning | Central reference pipeline and baseline |
-| Thursday afternoon | Three virtual secluded sites and first federated training loop |
-| Thursday evening | End-to-end global -> local -> aggregate -> redistribute round |
-| Friday morning | Missing-modality handling, non-IID split and Gefion-compatible execution |
-| Friday 12:00–14:00 | Privacy boundary, failure/reconnect behaviour and audit logging |
-| Friday 14:00–16:00 | Local vs centralised vs federated benchmark and held-out evaluation |
-| Friday 16:00–17:00 | Freeze configuration, hashes, documentation and demonstration |
+The current Gefion demonstration provides **logical workload and data separation**, not independent institutional security boundaries.
+
+A privileged user of the shared Gefion environment may have permissions that would not exist across separately administered hospitals or biobanks. The proof of concept therefore must not be presented as demonstrating protection against a privileged user of the underlying shared environment.
+
+A production deployment would additionally require:
+
+- institution-specific identity and access management;
+- network/security isolation;
+- hardened credentials and key management;
+- least-privilege filesystem permissions;
+- governance and institutional agreements;
+- security and privacy assessment; and
+- operational monitoring.
 
 ## Documentation
 
-- [Development flowchart](development-flowchart.md)
 - [Reference architecture](architecture.md)
+- [Development flowchart](development-flowchart.md)
+- [Data and federation contract](data-contract.md)
+- [Infrastructure Methods](../methods.md)
 
-## Primary references
+## Legacy material
 
-- RADIANT paper: https://pmc.ncbi.nlm.nih.gov/articles/PMC11697432/
-- Associated analysis repository: https://github.com/d3b-center/pLGG-immune-clinicoradiomics
+The directory name and some retained image assets originate from the earlier RADIANT-oriented design phase. They are kept as project provenance but should not be interpreted as the active demonstration workload.

@@ -1,95 +1,109 @@
 # Federated multimodal learning development flow
 
-The diagram below defines the development and execution workflow for the RADIANT-FL proof of concept.
+> **Path note:** This file is retained under the historical `docs/radiant-fl/` path. The active flow describes the current two-client Gefion proof of concept.
+
+The current development goal is to demonstrate that two logically separated clients can train on distinct local data partitions through Slurm and participate in one NVIDIA FLARE federation without combining their training datasets.
+
+## Current proof-of-concept flow
 
 ```mermaid
 flowchart TD
-    A[RADIANT public data] --> B[Verify patient IDs, outcomes and available modalities]
-    B --> C[Build harmonised patient manifest]
+    A["Version-controlled SuperFedMMD code/config"] --> B["Select Multimodal Healthcare fusion workload"]
+    D["Demonstration dataset<br/>see top-level README"] --> E["Inspect data with reproducible analysis"]
 
-    C --> C1[Clinical variables]
-    C --> C2[MRI-derived radiomic features]
-    C --> C3[Transcriptomics / RNA-seq]
-    C --> C4[Optional WGS-derived features]
+    E --> E1["Record counts"]
+    E --> E2["Positive / negative labels where applicable"]
+    E --> E3["Image / category distributions where applicable"]
+    E --> E4["Modality availability / missingness"]
 
-    C --> D{Original cohort role}
+    E --> F["Create two distinct client-local partitions"]
 
-    D -->|Replication| R0[Lock replication cohort]
-    R0 --> R1[No participation in training]
-    R1 --> R2[Final independent evaluation]
+    F --> AData[("Client A data directory")]
+    F --> BData[("Client B data directory")]
 
-    D -->|Discovery| E[Create subject-disjoint virtual institutions]
-    E --> F1[Site A]
-    E --> F2[Site B]
-    E --> F3[Site C]
+    AData --> CA["NVIDIA FLARE client A"]
+    BData --> CB["NVIDIA FLARE client B"]
 
-    F1 --> G1[Local data mapping and preprocessing]
-    F2 --> G2[Local data mapping and preprocessing]
-    F3 --> G3[Local data mapping and preprocessing]
+    A --> S["NVIDIA FLARE server / coordinator"]
+    A --> CA
+    A --> CB
 
-    G1 --> H1[Local multimodal training]
-    G2 --> H2[Local multimodal training]
-    G3 --> H3[Local multimodal training]
+    S -->|"global model / state"| CA
+    S -->|"global model / state"| CB
 
-    H1 --> P1[Policy / privacy filter]
-    H2 --> P2[Policy / privacy filter]
-    H3 --> P3[Policy / privacy filter]
+    CA --> LA["Client A local launcher"]
+    CB --> LB["Client B local launcher"]
 
-    P1 --> U[Approved model updates and metrics only]
-    P2 --> U
-    P3 --> U
+    LA --> SA["Submit client A training job to Slurm"]
+    LB --> SB["Submit client B training job to Slurm"]
 
-    U --> J[Gefion federation coordinator]
-    J --> K[Aggregate updates: FedAvg / FedProx]
-    K --> L[Global model N+1]
+    SA --> GA["Allocated compute resources"]
+    SB --> GB["Allocated compute resources"]
 
-    L --> M1[Redistribute to Site A]
-    L --> M2[Redistribute to Site B]
-    L --> M3[Redistribute to Site C]
+    GA --> MA["Client A model artifact / update"]
+    GB --> MB["Client B model artifact / update"]
 
-    M1 --> V[Local validation]
-    M2 --> V
-    M3 --> V
+    MA --> PA["Outbound allow-list"]
+    MB --> PB["Outbound allow-list"]
 
-    V --> Q{Converged / quality gate passed?}
-    Q -->|No| H1
-    Q -->|No| H2
-    Q -->|No| H3
+    PA -->|"approved update + aggregate metrics"| S
+    PB -->|"approved update + aggregate metrics"| S
 
-    Q -->|Yes| Z[Freeze global candidate model]
-    Z --> R2
+    S --> AGG["Aggregate updates"]
+    AGG --> NEXT["Updated global model / state"]
 
-    R2 --> S[Compare Local vs Centralised vs Federated]
-    S --> T[Report C-index, Brier score, calibration and site-level performance]
-    T --> END[PoC complete]
+    NEXT -->|"redistribute"| CA
+    NEXT -->|"redistribute"| CB
 
-    subgraph Boundary["Federation rule"]
-        X1[Raw patient-level data never leave the local site]
-        X2[Only explicitly approved model parameters and metrics may cross the boundary]
+    subgraph RULE["Proof-of-concept data rule"]
+        R1["Client A is configured for client A data only"]
+        R2["Client B is configured for client B data only"]
+        R3["No shared training-data directory is required by the client workflow"]
+        R4["Raw training examples are not federation payloads"]
     end
 ```
 
-## Required comparison
+## Slurm verification
 
-The proof of concept should report three settings:
+For each client training job, record:
 
-```mermaid
-flowchart LR
-    D[Same RADIANT discovery subjects] --> L[LOCAL<br/>Independent model per site]
-    D --> C[CENTRALISED<br/>Pooled reference baseline]
-    D --> F[FEDERATED<br/>Subject-disjoint sites]
-
-    L --> E[Compare performance]
-    C --> E
-    F --> E
-
-    E --> R[Held-out RADIANT replication cohort]
+```text
+client_id
+Slurm job ID
+partition
+allocated node
+requested CPU / GPU / memory
+start/end time
+exit status
+model artifact/output path
 ```
+
+The model artifact path after completed jobs must be verified on Gefion before the final demo.
+
+## Federation verification
+
+A successful run should establish that:
+
+1. the FLARE server sees both clients;
+2. each client receives the expected global state/job;
+3. each client launches training using its own data path;
+4. Slurm executes both local training workloads;
+5. approved updates return to the federation;
+6. aggregation produces a new global state; and
+7. the new state can be redistributed.
+
+## Security interpretation
+
+The current two-client layout is a **logical simulation of separate sites inside one shared Gefion environment**.
+
+It does not demonstrate protection against a privileged user with access to the shared filesystem, scheduler or host environment.
+
+A future institutional deployment would place clients under separate administrative/security domains and would require appropriate identity, network and access controls.
 
 ## Success criterion
 
 The principal systems-level success criterion is:
 
-> The federated model approaches the centralised reference performance while no raw patient-level data are transferred between secluded environments.
+> Two logically independent clients with distinct local training data successfully participate in a NVIDIA FLARE workflow coordinated on Gefion, execute their local training through Slurm, exchange only approved model/update information through the federation, and produce an aggregated global state that can be redistributed.
 
-The first PoC is intended to prove the architecture and execution model, not to constitute a clinically validated model.
+Predictive performance may be reported for demonstration purposes, but it is not the primary infrastructure success criterion.

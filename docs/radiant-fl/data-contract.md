@@ -1,238 +1,246 @@
-# RADIANT-FL data and federation contract
+# SuperFedMMD proof-of-concept data and federation contract
 
-This document defines the common interface that every SuperFedMMD secluded environment must implement for the RADIANT proof of concept.
+> **Path note:** This file is retained under the historical `docs/radiant-fl/` path for compatibility. The current contract is no longer RADIANT-specific.
 
-The purpose of the contract is to make local implementations interchangeable while ensuring that raw patient-level data remain under the control of the originating environment.
+This document defines the common interface for the current two-client SuperFedMMD proof of concept on Gefion.
+
+The purpose of the contract is to make local client workloads interchangeable while ensuring that the NVIDIA FLARE workflow does not require the client training datasets to be combined.
 
 ## 1. Contract principles
 
-Every site must agree on:
+Every participating client must agree on:
 
-- subject identity semantics
-- cohort role
-- modality schemas
-- outcome definition
-- preprocessing rules
-- missing-modality representation
-- train/validation semantics
-- model architecture version
-- trainable parameter allow-list
-- outbound payload allow-list
-- evaluation metrics
-- software/configuration versions
+- contract version;
+- client/site identity;
+- workload/model version;
+- input and label semantics;
+- preprocessing rules;
+- local data-path semantics;
+- local training entry point;
+- Slurm submission interface;
+- trainable/federated parameter schema;
+- outbound payload allow-list;
+- aggregate evaluation metrics; and
+- software/configuration versions.
 
-A site may hold a different subset of modalities, but it must implement the same contract version.
+A client must refuse execution if it cannot satisfy the active contract.
 
-## 2. Subject identity
+## 2. Logical client identity
 
-- `subject_id` is unique within the project.
-- The same subject must never be assigned to more than one federated site.
-- Direct identifiers must not be used as `subject_id`.
-- The replication cohort must never be assigned to a training site.
-- Site-local source identifiers may be retained locally but must not be transmitted.
+The current proof of concept uses at least two logical clients.
 
-| Field | Type | Description |
-|---|---|---|
-| `subject_id` | string | Project-scoped pseudonymous identifier |
-| `cohort_role` | enum | `discovery` or `replication` |
-| `site_id` | string | Virtual or real participating site |
-| `split` | enum | `train`, `validation`, or `test` |
+Example:
 
-## 3. Modality availability
+```text
+client_a
+client_b
+```
 
-Each subject has an explicit modality-presence record.
+Each client must have:
 
-| Field | Type |
-|---|---|
-| `has_clinical` | boolean |
-| `has_radiomics` | boolean |
-| `has_rnaseq` | boolean |
-| `has_wgs` | boolean |
+```text
+client_id
+FLARE client identity/configuration
+client-local data path
+workload/model revision
+runtime/environment identifier
+```
 
-The model must not infer missingness from arbitrary sentinel values. Missing modalities are represented explicitly through a modality-presence mask.
+The clients represent independent sites at the **workflow level**, but they are hosted within the same shared Gefion environment for the hackathon demonstration.
 
-## 4. Clinical feature contract
+## 3. Client-local data paths
 
-Initial clinical variables should follow the variables used in the RADIANT clinicoradiomic work where available, including:
+Each client must be configured with its own training-data location.
 
-- sex
-- age at diagnosis
-- tumour location
-- NF1 status
-- extent of tumour resection
-- chemotherapy status
-- radiation-treatment status
+Conceptually:
 
-Each variable must have a canonical field name, data type, allowed values/coding, missing-value policy, unit where applicable, and transformation/normalisation rule.
+```text
+client_a -> /path/to/client_a/data
+client_b -> /path/to/client_b/data
+```
 
-## 5. Radiomics feature contract
+The client workflow must not require a shared training-data directory containing both sites' training records.
 
-For the initial PoC, use the published processed MRI-derived radiomic feature representation rather than requiring raw-image preprocessing at every site.
+A client configuration should expose only the path required for that client's workload.
 
-Each site must agree on:
+> This is logical data separation for the proof of concept. It is not a claim that a privileged Gefion user is technically prevented from accessing both directories.
 
-- exact feature list and order
-- feature-generation version/source
-- normalisation rule
-- handling of missing radiomic features
-- whether normalisation parameters are fixed from a reference set or estimated locally
+## 4. Dataset partition contract
 
-Raw MRI data remain local and are outside the first PoC federation payload.
+The demonstration dataset and source are documented in the top-level README.
 
-## 6. Transcriptomics / RNA-seq contract
+The federation contract requires that:
 
-Each site must use the same transcriptomic representation.
+- client A and client B use distinct training partitions;
+- partition generation is reproducible;
+- the partition definition is versioned or hashed;
+- record overlap between client training partitions is checked where record identity is available; and
+- the active partition identifiers are recorded with the run.
 
-The contract must define:
+Recommended metadata:
 
-- reference gene identifiers
-- exact gene ordering
-- count / TPM / transformed representation
-- filtering rule
-- normalisation / transformation rule
-- missing-value policy
-- feature-selection rule if dimensionality reduction is used
+```text
+dataset_version
+partition_version
+client_id
+record_count
+partition_hash
+```
 
-If dimensionality reduction is used, its parameters and version must be frozen and reproducible.
+## 5. Descriptive data checks
 
-## 7. Optional WGS-derived feature contract
+Before federation, record workload-relevant descriptive statistics for each client.
 
-WGS-derived features are optional for the first milestone.
+Examples include:
 
-If enabled, the contract must define a derived feature representation rather than transferring raw genomic files.
+- number of records;
+- positive/negative label counts where applicable;
+- image/category counts where applicable;
+- modality availability;
+- missingness; and
+- class or category imbalance.
 
-The following must remain local:
+The exact statistics depend on the active Multimodal Healthcare workload and must not be assumed when they are not present in the selected dataset/component.
 
-- FASTQ
-- BAM / CRAM
-- patient-level VCF unless explicitly transformed into an approved derived representation
-- sample-level variant metadata not present on the federation allow-list
+## 6. Modality/input contract
 
-## 8. Outcome contract
+The current workload is sourced from the [Multimodal Healthcare](https://github.com/multimodal-healthcare) project.
 
-Primary task:
+The exact model-facing schema must be frozen for the active demonstration.
 
-**progression-free survival / progression risk**
+At minimum, the run configuration must define:
 
-| Field | Type | Description |
-|---|---|---|
-| `outcome_time` | numeric | Time-to-event using one agreed unit |
-| `outcome_event` | boolean | Event/progression indicator |
+```text
+active modalities
+input field/tensor names
+input shapes/dtypes
+label field and coding
+missing-value representation
+preprocessing version
+feature ordering where applicable
+```
 
-All sites must use the same time origin, time unit, event definition, censoring definition, and handling of invalid or missing outcome values.
+**Exact active schema:** `[TO CONFIRM FROM FINAL FUSION WORKLOAD]`
 
-## 9. Local preprocessing contract
+The infrastructure contract remains model-agnostic beyond requiring that all participating clients expose compatible inputs to the same workload revision.
 
-Every site executes preprocessing locally.
+## 7. Local preprocessing contract
+
+Preprocessing is executed locally for each client.
 
 Required metadata:
 
 ```text
 contract_version
+dataset_version
+partition_version
 preprocessing_version
-feature_schema_version
-software_version
-container_hash
+model/workload_version
+software/runtime_version
 config_hash
 ```
 
-A site must fail closed if its local data do not conform to the active contract.
+A client must fail closed if its local data do not conform to the active contract.
 
-## 10. Model-input contract
+## 8. Local training contract
 
-The local trainer receives a structure logically equivalent to:
+Each client must provide a reproducible training entry point that can be launched through Slurm.
 
-```text
-subject_id
-clinical_tensor        optional
-radiomics_tensor       optional
-rnaseq_tensor          optional
-wgs_tensor             optional
-modality_mask
-outcome_time
-outcome_event
-```
-
-`subject_id` is used for local bookkeeping only and must not be included in model updates.
-
-## 11. Model architecture contract
-
-Conceptually:
+The launcher must define:
 
 ```text
-clinical      -> clinical encoder ------\
-radiomics     -> radiomics encoder ------\
-RNA-seq       -> transcriptomic encoder ---> fusion -> survival/risk head
-WGS optional  -> genomic encoder --------/
-modality mask --------------------------/
+client_id
+data_path
+model/workload_version
+training configuration
+Slurm resource request
+output directory
 ```
 
-The contract must define architecture version, trainable components, frozen components, parameter names, tensor shapes, optimiser configuration, local epochs/steps, and learning-rate policy.
+The local training process must not require access to the other client's training-data directory.
 
-## 12. Trainable-parameter allow-list
+## 9. Slurm contract
 
-Example policy:
+For every client-local training execution, capture:
 
 ```text
-ALLOW:
-- modality adapters
-- fusion layer
-- task head
-
-OPTIONAL:
-- selected encoder layers
-
-DENY BY DEFAULT:
-- arbitrary tensors
-- cached activations
-- embeddings not explicitly approved
-- local optimiser state unless explicitly required
+client_id
+Slurm job ID
+partition
+allocated node
+requested CPU
+requested GPU
+requested memory
+wall-time
+runtime/environment
+exit status
+output/model artifact path
 ```
 
-The exact allow-list must be versioned.
+The exact Gefion Slurm flags and output locations are recorded after successful testing.
 
-## 13. Allowed outbound payload
+## 10. Model/update contract
 
-A secluded environment may transmit only approved:
+The NVIDIA FLARE workflow must define the exact model object or update schema exchanged between server and clients.
 
-- model parameter updates / deltas
-- aggregation weights
-- model/configuration hashes
-- federation round identifier
-- sample count
-- aggregate loss
-- validation metrics
-- technical federation health/status
+The contract must specify:
 
-No record-level metric export is permitted.
+- model/configuration version;
+- federated parameter names;
+- tensor shapes/dtypes;
+- full parameters vs. deltas/updates;
+- aggregation weight semantics;
+- local epochs/steps;
+- optimiser behaviour where relevant; and
+- global-state version/hash.
 
-## 14. Prohibited outbound payload
+**Exact federated update schema:** `[TO CONFIRM]`
 
-The following must not leave the secluded environment:
+## 11. Allowed outbound payload
 
-- raw MRI
-- raw RNA-seq
-- raw WGS
-- direct identifiers
-- patient-level clinical records
-- subject-level prediction tables unless explicitly approved for a later experiment
-- arbitrary files
-- unrestricted embeddings
-- unapproved intermediate activations
-- local source-system identifiers
+A logical client may transmit only approved:
 
-The outbound interface should be deny-by-default.
+- model parameters / updates / deltas;
+- aggregation weights where required;
+- global/local model identifiers or hashes;
+- federation-round identifier;
+- sample count where required for aggregation;
+- aggregate loss;
+- approved aggregate evaluation metrics; and
+- technical federation/Slurm status metadata.
 
-## 15. Federation-round contract
+No raw training record is part of the default federation payload.
+
+## 12. Prohibited outbound payload
+
+The following must not leave the client workload through the federation interface unless explicitly added to a later reviewed contract:
+
+- raw training examples;
+- raw MRI or other imaging source files;
+- raw genomic/sequencing source data;
+- record-level clinical source data;
+- direct identifiers;
+- client-local source identifiers;
+- arbitrary files;
+- unrestricted embeddings;
+- unapproved intermediate activations; and
+- record-level predictions/metrics.
+
+The outbound interface is deny-by-default.
+
+## 13. Federation-round contract
+
+Recommended round metadata:
 
 ```text
 round_id
 global_model_version_in
 global_model_hash_in
 contract_version
-participating_site_ids
+participating_client_ids
+client Slurm job IDs
 aggregation_method
-site_weighting_method
+client weighting method
 global_model_version_out
 global_model_hash_out
 metrics_schema_version
@@ -240,58 +248,115 @@ timestamp
 status
 ```
 
-## 16. Aggregation contract
-
-The first PoC may use a documented standard method such as FedAvg or FedProx.
+## 14. Aggregation contract
 
 The active configuration must define:
 
-- aggregation algorithm
-- client weighting
-- minimum participating clients
-- handling of missing clients
-- handling of modality-specific parameter updates
-- convergence / stop criterion
+- aggregation algorithm;
+- client weighting;
+- minimum participating clients;
+- handling of missing/failed clients;
+- handling of incomplete updates;
+- convergence/stop criterion; and
+- model-state versioning.
 
-## 17. Validation contract
+For the current demonstration:
 
-Suggested initial metrics:
+```text
+minimum participating clients = 2
+aggregation algorithm = [TO CONFIRM]
+```
 
-- C-index
-- Brier score
-- calibration metric / calibration plot where implemented
-- local validation loss
-- site-level sample count
+## 15. Model artifact contract
 
-The final held-out replication evaluation must use the same outcome definition and feature contract as training.
+Each completed local training job should produce a traceable model artifact or update.
 
-## 18. Versioning
+Record:
+
+```text
+client_id
+Slurm job ID
+artifact path
+artifact filename
+artifact hash
+model/workload version
+federation round
+```
+
+**Gefion artifact/output location:** `[TO CONFIRM]`
+
+## 16. Validation contract
+
+The infrastructure demonstration should report technical validation separately from predictive-model performance.
+
+Technical checks include:
+
+- both clients connected;
+- both clients received the intended global state/job;
+- both clients used distinct configured data paths;
+- Slurm jobs completed;
+- model/update artifacts were found;
+- approved updates returned;
+- aggregation completed; and
+- updated global state was redistributed.
+
+Any predictive metrics included in the demo must use the definitions provided by the active workload rather than legacy RADIANT-specific metrics.
+
+## 17. Versioning
 
 Recommended contract identifier:
 
 ```text
-radiant-fl-contract-v0.1
+superfedmmd-poc-contract-v0.2
 ```
 
-Increment the contract version for changes to feature names/order, outcome definition, preprocessing, missing-modality semantics, model architecture, trainable-parameter allow-list, outbound allow-list, or metrics schema.
+Increment the contract version for changes to:
 
-## 19. Site conformance gate
+- dataset partition semantics;
+- input/label schema;
+- preprocessing;
+- workload/model architecture;
+- federated parameter schema;
+- outbound allow-list;
+- Slurm execution interface; or
+- metrics schema.
 
-Before a site may participate in a federation round:
+## 18. Client conformance gate
+
+Before a client may participate:
 
 ```text
 contract_version matches
-feature_schema_version matches
-model_version matches
+dataset/partition version accepted
+model/workload version matches
+input schema valid
 config hash accepted
-local data schema valid
+client-local data path configured
+Slurm launcher configured
 outbound allow-list active
 ```
 
-If any check fails, the client should refuse the round rather than attempting an implicit conversion.
+If any check fails, the client should refuse the round rather than silently modifying the contract.
 
-## 20. PoC boundary
+## 19. Security boundary
 
-This contract is intentionally scoped to the hackathon proof of concept.
+The current proof of concept demonstrates **logical separation**, not security isolation against privileged users of Gefion.
 
-A production biomedical federation would additionally require formal governance, information-security review, institutional agreements, privacy-risk assessment, hardened identity/key management, operational monitoring and clinically appropriate model validation.
+Because the server and clients operate within a shared HPC environment, a sufficiently privileged user may have access beyond the boundaries visible to the application-level client workflow.
+
+A production deployment would additionally require:
+
+- institutional identity and access management;
+- least-privilege filesystem permissions;
+- authenticated and authorised client/server communication;
+- network isolation where appropriate;
+- hardened credential/key management;
+- audit and operational monitoring;
+- governance and institutional agreements; and
+- formal security/privacy assessment.
+
+## 20. Proof-of-concept boundary
+
+This contract is intentionally scoped to the hackathon demonstration.
+
+The current claim is limited to showing that two logically separated clients can train on distinct local datasets, execute their local workloads through Slurm and participate in a common NVIDIA FLARE federation without combining their training datasets in the workflow.

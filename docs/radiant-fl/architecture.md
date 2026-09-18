@@ -1,152 +1,183 @@
-# RADIANT-FL reference architecture
+# SuperFedMMD reference architecture
+
+> **Path note:** This file remains under the historical `docs/radiant-fl/` path for link compatibility. The active architecture is workload-agnostic and currently uses a Multimodal Healthcare fusion workload rather than RADIANT.
+
+The original concept sketches are retained below as design provenance.
 
 ![concept diagram 1](IMG_0071.jpg)
 ![concept diagram 2](IMG_0072.jpg)
 
-## System topology
+## Proof-of-concept topology
+
+The Gefion proof of concept separates the system into:
+
+1. a **NVIDIA FLARE federation/control plane**;
+2. two **logically independent client control processes**;
+3. two **client-specific data directories**; and
+4. **Slurm-backed compute jobs** used for local training.
 
 ```mermaid
 flowchart TB
-    subgraph GEFION["GEFION HPC — federation / control plane"]
-        COORD[Federation coordinator]
-        AGG[Model aggregation]
-        REG[Global model registry]
-        AUDIT[Round audit / provenance]
-        EVAL[Global evaluation orchestration]
+    REPO["GitHub<br/>code · configs · workload revision"]
 
-        COORD --> AGG
-        AGG --> REG
-        REG --> COORD
-        COORD --> AUDIT
-        REG --> EVAL
+    subgraph GEFION["GEFION SHARED ENVIRONMENT"]
+        subgraph CONTROL["Federation / control processes"]
+            SERVER["NVIDIA FLARE server / coordinator"]
+            AGG["Aggregation / global state"]
+            AUDIT["Logs / provenance"]
+            SERVER <--> AGG
+            SERVER --> AUDIT
+            AGG --> AUDIT
+        end
+
+        subgraph SITEA["LOGICAL CLIENT A"]
+            AC["NVIDIA FLARE client A"]
+            AD[("Client A data directory")]
+            AL["Local launcher / adapter"]
+            AD --> AL
+            AC <--> AL
+        end
+
+        subgraph SITEB["LOGICAL CLIENT B"]
+            BC["NVIDIA FLARE client B"]
+            BD[("Client B data directory")]
+            BL["Local launcher / adapter"]
+            BD --> BL
+            BC <--> BL
+        end
+
+        SLURM["Slurm scheduler"]
+        CA["Allocated compute job for A"]
+        CB["Allocated compute job for B"]
+
+        AL -->|"submit training job"| SLURM
+        BL -->|"submit training job"| SLURM
+        SLURM --> CA
+        SLURM --> CB
+
+        CA -->|"model artifact / approved update"| AC
+        CB -->|"model artifact / approved update"| BC
+
+        SERVER <-->|"global state ↔ approved update + metrics"| AC
+        SERVER <-->|"global state ↔ approved update + metrics"| BC
     end
 
-    subgraph A["Secluded environment A"]
-        AC[FL client]
-        AD[Local RADIANT partition]
-        AT[Local trainer]
-        AM[Local validation]
-        AD --> AT
-        AC --> AT
-        AT --> AM
-    end
-
-    subgraph B["Secluded environment B"]
-        BC[FL client]
-        BD[Local RADIANT partition]
-        BT[Local trainer]
-        BM[Local validation]
-        BD --> BT
-        BC --> BT
-        BT --> BM
-    end
-
-    subgraph C["Secluded environment C"]
-        CC[FL client]
-        CD[Local RADIANT partition]
-        CT[Local trainer]
-        CM[Local validation]
-        CD --> CT
-        CC --> CT
-        CT --> CM
-    end
-
-    COORD <-->|signed model + approved updates / metrics| AC
-    COORD <-->|signed model + approved updates / metrics| BC
-    COORD <-->|signed model + approved updates / metrics| CC
+    REPO --> SERVER
+    REPO --> AC
+    REPO --> BC
 ```
 
-## Multimodal model concept
+## Important implementation distinction
 
-The initial model should support different modality availability between institutions and patients.
+The diagram above represents **logical site separation**, not independent institutional isolation.
 
-```mermaid
-flowchart LR
-    RI[Radiomics] --> RE[Radiomics encoder]
-    CL[Clinical variables] --> CE[Clinical encoder]
-    RNA[RNA-seq] --> TE[Transcriptomic encoder]
-    WGS[Optional WGS features] --> WE[Genomic encoder]
+Both clients are currently hosted within the same Gefion environment for the hackathon proof of concept. Client-specific data paths are used so that each client workload operates only on its intended training data.
 
-    RE --> F[Fusion layer]
-    CE --> F
-    TE --> F
-    WE --> F
+The design target for a later institutional deployment is different:
 
-    MASK[Modality-presence mask] --> F
-    F --> H[Survival / progression-risk head]
+```text
+Institution A                         Institution B
+----------------                     ----------------
+local data                           local data
+local FLARE client                   local FLARE client
+local compute                        local compute
+       \                                /
+        \-- authenticated federation --/
+                    |
+              FLARE coordinator
 ```
 
-A site does not need to contain every modality in order to participate, provided the common model/update contract explicitly defines which components it may train and return.
+Such a deployment would require institution-specific IAM, network controls and privileged access boundaries. Those controls are outside the security claims of the current shared-Gefion proof of concept.
+
+## Workload abstraction
+
+The current reference model is supplied from the [Multimodal Healthcare](https://github.com/multimodal-healthcare) project.
+
+SuperFedMMD does not require the federation infrastructure to be coupled to a single model architecture. A compatible workload must provide:
+
+- a versioned model/training implementation;
+- a defined input/data contract;
+- a local training entry point;
+- an approved model/update object that can be federated; and
+- reproducible output artifacts.
+
+The active modalities and exact fusion-model configuration used in the demonstration are recorded separately in the run configuration.
 
 ## Federation contract
 
-Every environment must share the same versioned contract for:
+Every logical client must use the same versioned contract for:
 
-- patient identifier handling
-- feature schemas
-- outcome definition
-- preprocessing rules
-- train/validation partition semantics
-- missing-modality representation
-- model architecture and trainable parameter allow-list
-- optimiser and local training configuration
-- metrics allowed to leave the site
-- parameters allowed to leave the site
-- software/container version
-- model and configuration hashes
+- client identity;
+- workload/model revision;
+- input schema and label semantics;
+- preprocessing rules;
+- local data-path semantics;
+- Slurm resource/submission interface;
+- trainable parameter/update schema;
+- metrics permitted to leave the client;
+- model artifacts and hashes; and
+- software/runtime versions.
 
-## Privacy and security boundary
+## Data and security boundary
 
 Allowed to cross the federation boundary:
 
-- signed global model parameters
-- explicitly approved local parameter updates
-- approved aggregate/local validation metrics
-- technical telemetry required for federation health
+- global model/state objects;
+- explicitly approved local parameter/model updates;
+- approved aggregate metrics;
+- sample counts or aggregation weights where configured;
+- model/configuration hashes;
+- technical telemetry required for federation health.
 
-Not allowed to cross the boundary:
+Not allowed to cross the federation boundary by default:
 
-- raw MRI
-- raw RNA-seq
-- raw WGS
-- patient-level clinical records
-- direct identifiers
-- unrestricted embeddings or intermediate representations
-- arbitrary local files
+- raw client training data;
+- raw imaging;
+- raw genomic/sequencing source data;
+- patient-level/record-level clinical source data;
+- direct identifiers;
+- arbitrary client-local files;
+- unrestricted embeddings or intermediate activations.
 
-Secure aggregation and/or additional privacy mechanisms can be enabled as the federation moves beyond the initial systems PoC.
+## Slurm execution boundary
 
-## Virtual-site simulation
+Compute-intensive local training should run through Slurm.
 
-For the initial RADIANT PoC, secluded environments are simulated using mutually exclusive subject partitions from the discovery cohort.
+The client-local launcher is responsible for:
 
-The partitions should be intentionally non-IID when feasible, for example by varying:
+1. submitting the training job;
+2. associating the Slurm job with the correct logical client;
+3. pointing the job to the correct client-local data directory;
+4. waiting for or retrieving the resulting model artifact/update;
+5. recording Slurm job metadata; and
+6. exposing only the approved update back to NVIDIA FLARE.
 
-- patient age distribution
-- tumor location distribution
-- outcome/progression prevalence
-- molecular subtype prevalence
-- modality availability
+The exact model artifact/output location after job completion is:
 
-This is preferable to a purely random equal split because it exercises a central challenge of real multi-institution federation: heterogeneous local data distributions.
+```text
+[TO CONFIRM ON GEFION]
+```
 
-## Evaluation
+## Technical evaluation
 
-The held-out replication cohort is never used for federation training.
+The primary systems-level demonstration is:
 
-Primary comparison:
+```text
+global state
+    ->
+two logical clients
+    ->
+distinct local datasets
+    ->
+Slurm-backed local training
+    ->
+approved model/update exchange
+    ->
+aggregation
+    ->
+updated global state
+    ->
+redistribution
+```
 
-- Local models
-- Centralised reference model
-- Federated global model
-
-Suggested metrics:
-
-- concordance index (C-index)
-- Brier score
-- calibration
-- site-level validation performance
-- convergence across federation rounds
-- centralised-to-federated performance delta
-
-The first milestone demonstrates technical feasibility and reproducibility; it is not a clinical validation claim.
+The first milestone demonstrates federated execution feasibility and reproducibility. It is not a production security or clinical validation claim.
