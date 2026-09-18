@@ -222,7 +222,7 @@ To explore how federated multimodal learning can be coordinated on shared high-p
 Each client submits its local training workload through Slurm and returns only approved model updates and aggregate metrics to the NVIDIA FLARE federation layer. These updates are aggregated into a new global model state and redistributed to the participating clients for subsequent training rounds. In the current hackathon implementation, both clients share the underlying Gefion environment; the proof of concept therefore demonstrates **federated orchestration, logical data separation and distributed model training**, rather than full institution-level security isolation.
 
 <p align="center">
-  <img src="docs/assets/Methods.png" width="100%" alt="SuperFedMMD proof-of-concept method showing two logically separated NVIDIA FLARE clients, client-local multimodal data, Slurm GPU training on Gefion and federated model aggregation">
+  <img src="docs/assets/superfedmmd_infrastructure-methods.png" width="100%" alt="SuperFedMMD proof-of-concept method showing two logically separated NVIDIA FLARE clients, client-local multimodal data, Slurm GPU training on Gefion and federated model aggregation">
 </p>
 
 The model itself remains a **pluggable workload**: the infrastructure coordinates how training is executed and how model updates are exchanged, without coupling the federation to one particular model architecture or biomedical data modality.
