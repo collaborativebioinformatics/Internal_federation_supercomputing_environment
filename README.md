@@ -39,7 +39,6 @@ The project uses **Gefion** as the supercomputing environment and **NVIDIA FLARE
 - [Team 6](#team-6)
 - [Documentation](#documentation)
 - [Appendix](#appendix)
-- [Original concept material](#original-concept-material)
 - [References and resources](#references-and-resources)
 
 ---
@@ -333,12 +332,6 @@ Model architecture and disease-specific model optimisation are handled separatel
 ### Appendix
 
 - **[Appendix A — Infrastructure implementation checklist](docs/appendix-implementation-checklist.md)**
-
----
-
-## Original concept material
-
-The original hand-drawn diagrams are retained as project provenance and remain available in the repository.
 
 ---
 
